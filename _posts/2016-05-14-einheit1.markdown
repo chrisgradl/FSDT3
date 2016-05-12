@@ -1,0 +1,247 @@
+---
+layout: default
+title:  "Einheit 1: Aruduino -> Node"
+date:   2016-05-14 17:50:00
+categories: main
+---
+
+##Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
+![FSDT3 Architecture]({{ site.url }}/img/goal.gif)
+
+##der Aufbau unserer Anwendung:
+![FSDT3 Architecture]({{ site.url }}/img/fsdt3_architecture.png)
+
+
+##Anforderungen für diese Übung:
+* NodeJS installiert
+* NPM installiert
+
+überprüfen ob Node.js installiert ist mit dem Command
+{% highlight javascript %}
+  node --version
+{% endhighlight %}  
+
+auch mit npm (sollte mit Node.js mitinstalliert worden sein)
+{% highlight javascript %}
+  npm --version
+{% endhighlight %}
+
+##Anlegen eines neuen Node Projekts
+
+Für die Übung legen wir ein neues Node Projekt an:
+
+* Wechsle in das gewünschte Verzeichnis in der Command Line
+* Lege ein neues Projekt an mit dem Command:
+{% highlight javascript %}
+  npm init
+{% endhighlight %}
+* Anschließend den Auforderunen folgen
+
+
+## 1. Auslesen des Datenstreams in Node.js
+Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten mit Node auslesen zu können verwenden wir die Library [node-serialport]. Diese erlaubt es uns den seriellen Datenstream des Arduinos Zeile für Zeile auszulesen.
+
+Der Arduino sendet die Daten Zeile für Zeile an die serielle Schnittstelle:
+{% highlight json %}
+{timestamp: 387709, type: "heart rate sensor raw", unit: "raw", value: 500}
+{timestamp: 387710, type: "heart rate sensor bpm", unit: "bpm", value: 35}
+{timestamp: 387720, type: "heart rate sensor raw", unit: "raw", value: 494}
+{timestamp: 387721, type: "heart rate sensor bpm", unit: "bpm", value: 35}
+{timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}
+{% endhighlight %}
+
+Die Library installieren wir mit folgendem Command:
+{% highlight javascript %}
+  npm install serialport
+{% endhighlight %}
+
+In dem index.js file importieren wir jetzt das serialport modul
+{% highlight javascript %}
+  var serialport = require('serialport');
+{% endhighlight %}
+
+Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns alle verbundenen Geräte anzeigen
+{% highlight javascript %}
+serialport.list(function(err, ports) {
+
+  ports.forEach(function(port) {
+      console.log(port);
+  });
+});
+{% endhighlight %}
+
+Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
+Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:
+
+{% highlight javascript %}
+var portName = '/dev/cu.usbmodem1421';
+{% endhighlight %}
+
+Anschließend verbinden wir uns mit dem Arduino Gerät
+
+{% highlight javascript %}
+var arduinoPort = new serialport.SerialPort(portName, {
+    baudrate: 9600,
+    parser: serialport.parsers.readline("\r\n")
+});
+{% endhighlight %}
+
+Jetzt erstellen wir Funktionen die bei den unterschiedlichen Events der serialport library aufgerufen werden:
+{% highlight javascript %}
+arduinoPort.on('open', function() {
+  //ich werde aufgerufen wenn wir uns mit dem Arduino verbinden
+});
+{% endhighlight %}
+
+Jetzt lassen wir uns mit der entsprechenden event und einer anonymen Funktion die Daten loggen:
+
+{% highlight javascript %}
+arduinoPort.on('data', function(data) {
+      // i am called everytime a new line is sent from the arduino
+      // data is read as String so we parse it to get a JSON Object
+      var obj = JSON.parse(data);
+      console.log(obj.value);
+});
+{% endhighlight %}
+
+## 2. Senden der Daten an eine Webanwendung
+
+Um die Daten nun visualisieren zu können werden diese zu einem Javascript Client übertragen
+
+Folgende Technologien verwenden wir:
+
+* [Socket.io] bzw WebSockets zum Übertragen der Daten
+* [Express] um die Webanwendug auf dem Node.js Server zu hosten
+* [Smoothie.js] für eine Echtzeit-Visualiserung
+
+Zu unserem index.js file müsen wir die notwendigen Komponenten hinzufügen. Dazu installieren wir Express und Socket.io
+Dazu führen wir folgende Commands in unserem Verzeichnis aus:
+
+{% highlight javascript %}
+npm install express --save
+npm install socket.io --save
+{% endhighlight %}  
+
+Anschließend erweitern wir unsere node Anwendung um einen express und socket.io server:
+
+{% highlight javascript %}
+var express = require('express');
+var app = express();
+var http = require('http').Server(app);
+var socketio = require('socket.io')(http);
+{% endhighlight %}  
+
+Nicht verstanden? Hier eine [Erklärung zu Module]
+
+Zum Testen ob alles läuft starten wir den Server:
+{% highlight javascript %}
+
+// return a Hello World Message when the base url is requested
+app.get('/', function (req, res){
+    res.send('<h1>Hello world</h1>');
+  });
+
+//start the server at port 3000
+http.listen(3000);
+{% endhighlight %}
+
+Starten wir jetzt unsere Anwendung neu und wechseln auf die [Seite] bekommt man Hello World zurück
+
+Jetzt wollen wir die entsprechenden Daten über Socket.io zum Client verschicken:  
+
+{% highlight javascript %}
+socketio.on('connection', function(socket) {
+    console.log("WebSocket connected");
+    //start to read the data from the arduino and send to connected client
+    arduinoPort.on('data', function(data) {
+        var obj = JSON.parse(data);
+          socket.emit('data', obj);
+    });
+});
+{% endhighlight %}
+
+Mit einer einfachen [Websocket Anwendung] können wir kontrollieren ob wir die Daten empfangen auf der URL: *ws://localhost:3000*
+
+
+## 3. Erstellen der Webanwendug
+
+Wir erstellen in unserem Projektordner einen Subordner mit dem Namen client und erstellen ein index.html und ein client.js file
+Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:
+{% highlight javascript %}
+app.get('/', function (req, res){
+    res.sendFile(dirname + "/client/index.html");
+  });
+
+{% endhighlight %}
+
+Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die links zu den files im index.html geladen werden
+{% highlight javascript %}
+app.use(express.static(dirname + "/client"));
+{% endhighlight %}
+
+Jetzt können wir die Webanwendung programmieren. Dazu geben wir folgende Scripts in unserem Html File an:
+
+{% highlight javascript %}
+<script src="/socket.io/socket.io.js"></script>
+<script type="text/javascript" src="/client.js"></script>
+{% endhighlight %}
+
+In unserem client.js file erstellen wir nun einen socket.io client und eine funktion zum empfangen der Daten
+
+{% highlight javascript %}
+var socket = io();
+
+socket.on('data', function(msg) {
+    console.log(msg);
+});
+{% endhighlight %}
+
+In der Konsole im Browser werden jetzt die Werte vom Arduino geprintet
+
+### Echtzeit-Visualiserung mit smoothiecharts
+
+Jetzt können wir die Daten visualisieren. Hierzu verwenden wir [Smoothie.js].
+
+Dazu legen wir einen lib Folder an (/client/lib/) und kopieren den [Code für die Library] in ein neues File smoothie.js
+Anschließend binden wir noch das script in unser index.html file ein.
+
+In unserem index.html File erstellen wir nun ein neues Element auf dem die Visualisierung gezeichnet wird:
+{% highlight html %}
+    <canvas id="mycanvas" width="800" height="200"></canvas>
+{% endhighlight %}
+
+
+Im client.js File erstellen wir nun ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.
+
+{% highlight javascript %}
+var smoothie = new SmoothieChart();
+smoothie.streamTo(document.getElementById("mycanvas"));
+
+var line1 = new TimeSeries();
+smoothie.addTimeSeries(line1);   
+{% endhighlight %}
+
+Um jetzt neue Werte zu zeichnen müssen diese an das line1 Obekt angefügt werden. Das machen wir in dem socket.io Callback
+{% highlight javascript %}
+socket.on('data', function(msg) {
+    console.log(msg);
+    //we only want to visualize the raw sensor value
+    if (msg.unit == 'raw') {
+        line1.append(new Date().getTime(), msg.value);
+    }
+});
+{% endhighlight %}
+
+
+
+
+
+
+[node-serialport]: https://github.com/voodootikigod/node-serialport/
+[Smoothie.js]: http://smoothiecharts.org/
+[Express]: http://expressjs.com/
+[Socket.io]: http://socket.io
+[Seite]: http://localhost:3000/
+[Websocket Anwendung]: http://www.websocket.org/echo.html
+[Erklärung zu Module]: http://openmymind.net/2012/2/3/Node-Require-and-Exports/
+[Code für die Library]: https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js
