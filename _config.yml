@@ -1,7 +1,7 @@
 # Setup
 title:        FSDT3 Teil2
 tagline:      Visualisierung und Verarbeitung von Sensordaten
-baseurl:      ""
+baseurl:      "/fsdt3"
 paginate:     1
 
 # About/contact
