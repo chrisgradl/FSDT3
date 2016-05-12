@@ -5,14 +5,15 @@ date:   2016-05-14 17:50:00
 categories: main
 ---
 
-##Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
+## Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
 ##der Aufbau unserer Anwendung:
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
 
 
-##Anforderungen für diese Übung:
+## Anforderungen für diese Übung:
+
 * NodeJS installiert
 * NPM installiert
 
