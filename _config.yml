@@ -8,7 +8,7 @@ future:       true
 # About/contact
 author:
   name:       Christian Gradl
-  url:        http://carma.fhstp.ac.at
+  url:        https://www.fhstp.ac.at/de/uber-uns/mitarbeiter-innen-a-z/gradl-christian
 
 # Gems
 gems:
