@@ -233,8 +233,33 @@ socket.on('data', function(msg) {
 });
 {% endhighlight %}
 
+### Danger Alert! Mein Arduino geht nicht Was jetzt???
+Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicth funktioniert gibt es die Möglichkeit Random Daten vom Node Server zum Client zu schicken
+Dazu erstellen folgende Funktion:
+
+{% highlight javascript %}
+var sensorJson = JSON.parse('{"timestamp": 19123,"type": "heart rate sensor raw","unit": "raw","value": 987}');
+function sendRandomData(socket) {
+    setInterval(function() {
+        sensorJson.value = Math.random();
+        socket.emit('data', sensorJson);
+    }, 100);
+}
+{% endhighlight %}
+
+Diese Funktion muss man dann in dem 'connection' Callback aufrufen wenn sich der Client verbindet
 
 
+
+So wir haben jetzt die Daten eingelesen und auch zum Client geschickt und visualisiert. Für viele Anwendungen ist es jedoch auch spannend die Sensorwerte in einem File zu speichern und zu einem späteren Zeitpunkt weiterzuverarbeiten.
+
+### Hausübung:
+
+Erweitere unsere Node.js Applikation um eine Funktion zum Speichern der 'raw' Sensorwerte.
+Sobald sich der Server mit dem Arduino verbindet sollen die Werte in ein File gespeichert werden. (CSV oder JSON).
+Dazu kann das bestehende Projekt einfach umgeändert werden. Das ganze soll ohne Client  funktionieren. Die socket.io und express teile können also gelöscht werden.
+
+Die [FileSystem Komponente] von Node soll dazu verwendet werden
 
 
 
@@ -245,4 +270,5 @@ socket.on('data', function(msg) {
 [Seite]: http://localhost:3000/
 [Websocket Anwendung]: http://www.websocket.org/echo.html
 [Erklärung zu Module]: http://openmymind.net/2012/2/3/Node-Require-and-Exports/
-[Code für die Library]: https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js
+[Code für die Library]:  https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js
+[FileSystem Komponente]: https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback
