@@ -8,7 +8,7 @@ categories: main
 ## Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
-##der Aufbau unserer Anwendung:
+## der Aufbau unserer Anwendung:
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
 
 
@@ -27,7 +27,7 @@ auch mit npm (sollte mit Node.js mitinstalliert worden sein)
   npm --version
 {% endhighlight %}
 
-##Anlegen eines neuen Node Projekts
+## Anlegen eines neuen Node Projekts
 
 Für die Übung legen wir ein neues Node Projekt an:
 
