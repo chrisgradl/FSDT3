@@ -22,25 +22,28 @@
 
     <section class="main-content">
       
-      <p>##Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
-<img src="/fsdt3/img/goal.gif" alt="FSDT3 Architecture" /></p>
+      <h2 id="ziel-der-bung-ist-das-auslesen-der-sensorwerte-und-bertragen-auf-eine-website">Ziel der Übung ist das Auslesen der Sensorwerte und Übertragen auf eine Website.</h2>
+<p><img src="/fsdt3/img/goal.gif" alt="FSDT3 Architecture" /></p>
 
-<p>##der Aufbau unserer Anwendung:
-<img src="/fsdt3/img/fsdt3_architecture.png" alt="FSDT3 Architecture" /></p>
+<h2 id="der-aufbau-unserer-anwendung">der Aufbau unserer Anwendung:</h2>
+<p><img src="/fsdt3/img/fsdt3_architecture.png" alt="FSDT3 Architecture" /></p>
 
-<p>##Anforderungen für diese Übung:
-* NodeJS installiert
-* NPM installiert</p>
+<h2 id="anforderungen-fr-diese-bung">Anforderungen für diese Übung:</h2>
+
+<ul>
+  <li>NodeJS installiert</li>
+  <li>NPM installiert</li>
+</ul>
 
 <p>überprüfen ob Node.js installiert ist mit dem Command</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="nx">node</span> <span class="o">--</span><span class="nx">version</span></code></pre></figure>
 
-<p>auch mit npm (sollte mit Node.js mitinstalliert worden sein)</p>
+<p>npm (sollte mit Node.js mitinstalliert worden sein)</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="nx">npm</span> <span class="o">--</span><span class="nx">version</span></code></pre></figure>
 
-<p>##Anlegen eines neuen Node Projekts</p>
+<h2 id="anlegen-eines-neuen-node-projekts">Anlegen eines neuen Node Projekts</h2>
 
 <p>Für die Übung legen wir ein neues Node Projekt an:</p>
 
@@ -58,8 +61,6 @@
 <h2 id="auslesen-des-datenstreams-in-nodejs">1. Auslesen des Datenstreams in Node.js</h2>
 <p>Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten mit Node auslesen zu können verwenden wir die Library <a href="https://github.com/voodootikigod/node-serialport/">node-serialport</a>. Diese erlaubt es uns den seriellen Datenstream des Arduinos Zeile für Zeile auszulesen.</p>
 
-<p>Der Arduino sendet die Daten Zeile für Zeile an die serielle Schnittstelle:</p>
-
 <figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387709,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor raw"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">}</span><span class="w">
 </span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387710,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor bpm"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"bpm"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">}</span><span class="w">
 </span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387720,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor raw"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">494</span><span class="p">}</span><span class="w">
@@ -74,7 +75,7 @@
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript">  <span class="kd">var</span> <span class="nx">serialport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'serialport'</span><span class="p">);</span></code></pre></figure>
 
-<p>Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns alle verbundenen Geräte anzeigen</p>
+<p>Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns die Geräte anzeigen</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">serialport</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">ports</span><span class="p">)</span> <span class="p">{</span>
 
@@ -86,9 +87,15 @@
 <p>Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
 Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:</p>
 
+<p>Mac &amp; Linux:</p>
+
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">portName</span> <span class="o">=</span> <span class="s1">'/dev/cu.usbmodem1421'</span><span class="p">;</span></code></pre></figure>
 
-<p>Anschließend verbinden wir uns mit dem Arduino Gerät</p>
+<p>Für Windows:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">portName</span> <span class="o">=</span> <span class="s1">'COM3'</span><span class="p">;</span></code></pre></figure>
+
+<p>Anschließend verbinden wir uns mit dem Arduino</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">arduinoPort</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">serialport</span><span class="p">.</span><span class="nx">SerialPort</span><span class="p">(</span><span class="nx">portName</span><span class="p">,</span> <span class="p">{</span>
     <span class="na">baudrate</span><span class="p">:</span> <span class="mi">9600</span><span class="p">,</span>
@@ -101,7 +108,7 @@ Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNa
   <span class="c1">//ich werde aufgerufen wenn wir uns mit dem Arduino verbinden</span>
 <span class="p">});</span></code></pre></figure>
 
-<p>Jetzt lassen wir uns mit der entsprechenden event und einer anonymen Funktion die Daten loggen:</p>
+<p>Wir erstellen eine Funktion die beim Empfangen von neuen Daten aufgerufen wird:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">arduinoPort</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
       <span class="c1">// i am called everytime a new line is sent from the arduino</span>
@@ -135,9 +142,9 @@ Dazu führen wir folgende Commands in unserem Verzeichnis aus:</p>
 <span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
 <span class="kd">var</span> <span class="nx">socketio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'socket.io'</span><span class="p">)(</span><span class="nx">http</span><span class="p">);</span></code></pre></figure>
 
-<p>Nicht verstanden? Hier eine <a href="http://openmymind.net/2012/2/3/Node-Require-and-Exports/">Erklärung zu Module</a></p>
+<p>Wie funktioniert das Laden von Modulen? Hier eine <a href="http://openmymind.net/2012/2/3/Node-Require-and-Exports/">Erklärung zu Module</a></p>
 
-<p>Zum Testen ob alles läuft starten wir den Server:</p>
+<p>Mit einer Http Get Route können wir überprüfen ob der Server richtig läuft:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="c1">// return a Hello World Message when the base url is requested</span>
 <span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
@@ -160,27 +167,25 @@ Dazu führen wir folgende Commands in unserem Verzeichnis aus:</p>
     <span class="p">});</span>
 <span class="p">});</span></code></pre></figure>
 
-<p>Mit einer einfachen <a href="http://www.websocket.org/echo.html">Websocket Anwendung</a> können wir kontrollieren ob wir die Daten empfangen auf der URL: <em>ws://localhost:3000</em></p>
-
 <h2 id="erstellen-der-webanwendug">3. Erstellen der Webanwendug</h2>
 
-<p>Wir erstellen in unserem Projektordner einen Subordner mit dem Namen client und erstellen ein index.html und ein client.js file
+<p>Wir erstellen in unserem Projektordner einen Subordner mit dem Namen ‘client’. In diesem legen wir ein index.html und ein client.js file an.
 Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-    <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="nx">dirname</span> <span class="o">+</span> <span class="s2">"/client/index.html"</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="err">\</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client/index.html"</span><span class="p">);</span>
   <span class="p">});</span></code></pre></figure>
 
 <p>Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die links zu den files im index.html geladen werden</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">dirname</span> <span class="o">+</span> <span class="s2">"/client"</span><span class="p">));</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="err">\</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client"</span><span class="p">));</span></code></pre></figure>
 
 <p>Jetzt können wir die Webanwendung programmieren. Dazu geben wir folgende Scripts in unserem Html File an:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"/socket.io/socket.io.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script</span><span class="err">&gt;
 </span><span class="o">&lt;</span><span class="nx">script</span> <span class="nx">type</span><span class="o">=</span><span class="s2">"text/javascript"</span> <span class="nx">src</span><span class="o">=</span><span class="s2">"/client.js"</span><span class="o">&gt;&lt;</span><span class="sr">/script&gt;</span></code></pre></figure>
 
-<p>In unserem client.js file erstellen wir nun einen socket.io client und eine funktion zum empfangen der Daten</p>
+<p>In unserem client.js file erstellen wir nun einen socket.io Client und eine Funktion zum Empfangen der Daten</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">();</span>
 
@@ -201,7 +206,7 @@ Anschließend binden wir noch das script in unser index.html file ein.</p>
 
 <figure class="highlight"><pre><code class="language-html" data-lang="html">    <span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">"mycanvas"</span> <span class="na">width=</span><span class="s">"800"</span> <span class="na">height=</span><span class="s">"200"</span><span class="nt">&gt;&lt;/canvas&gt;</span></code></pre></figure>
 
-<p>Im client.js File erstellen wir nun ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.</p>
+<p>Im client.js File erstellen wir ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">smoothie</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmoothieChart</span><span class="p">();</span>
 <span class="nx">smoothie</span><span class="p">.</span><span class="nx">streamTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"mycanvas"</span><span class="p">));</span>
@@ -209,7 +214,7 @@ Anschließend binden wir noch das script in unser index.html file ein.</p>
 <span class="kd">var</span> <span class="nx">line1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TimeSeries</span><span class="p">();</span>
 <span class="nx">smoothie</span><span class="p">.</span><span class="nx">addTimeSeries</span><span class="p">(</span><span class="nx">line1</span><span class="p">);</span>   </code></pre></figure>
 
-<p>Um jetzt neue Werte zu zeichnen müssen diese an das line1 Obekt angefügt werden. Das machen wir in dem socket.io Callback</p>
+<p>Um jetzt neue Werte zu zeichnen, müssen diese an das line1 Objekt angefügt werden. Das machen wir in dem socket.io Callback</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
     <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
@@ -219,10 +224,34 @@ Anschließend binden wir noch das script in unser index.html file ein.</p>
     <span class="p">}</span>
 <span class="p">});</span></code></pre></figure>
 
+<h3 id="danger-alert-mein-arduino-geht-nicht-was-jetzt">Danger Alert! Mein Arduino geht nicht Was jetzt???</h3>
+<p>Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicht funktioniert gibt es die Möglichkeit Random Daten von der Node Applikation zum Client zu schicken
+Dazu erstellen folgende Funktion:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">sensorJson</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">'{"timestamp": 19123,"type": "heart rate sensor raw","unit": "raw","value": 987}'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">sendRandomData</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">sensorJson</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+        <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="nx">sensorJson</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<p>Diese Funktion muss man dann in dem ‘connection’ Callback aufrufen wenn sich der Client verbindet</p>
+
+<p>So wir haben jetzt die Daten eingelesen und auch zum Client geschickt und visualisiert. Für viele Anwendungen ist es jedoch auch spannend die Sensorwerte in einem File zu speichern und zu einem späteren Zeitpunkt weiterzuverarbeiten.</p>
+
+<h3 id="hausbung">Hausübung:</h3>
+
+<p>Erweitere unsere Node.js Applikation um eine Funktion zum Speichern der ‘raw’ Sensorwerte.
+Sobald sich der Server mit dem Arduino verbindet sollen die Werte in ein File gespeichert werden. (CSV oder JSON).
+Dazu kann das bestehende Projekt einfach umgeändert werden. Das ganze soll ohne Client  funktionieren. Die socket.io und express teile können also gelöscht werden.</p>
+
+<p>Die <a href="https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback">FileSystem Komponente</a> von Node soll dazu verwendet werden</p>
+
 
 
       <footer class="site-footer">
-  <span class="site-footer-owner"><a href="">FSDT3 Teil2</a> is maintained by <a href="http://carma.fhstp.ac.at">Christian Gradl</a>.</span>
+  <span class="site-footer-owner"><a href="">FSDT3 Teil2</a> is maintained by <a href="https://www.fhstp.ac.at/de/uber-uns/mitarbeiter-innen-a-z/gradl-christian">Christian Gradl</a>.</span>
   <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
 </footer>
 

@@ -1,11 +1,11 @@
 ---
 layout: default
-title:  "Einheit 1: Aruduino -> Node"
+title:  "Einheit 1: Arduino -> Node"
 date:   2016-05-14 17:50:00
 categories: main
 ---
 
-## Ziel der Übung ist das Auslesen der Daten und das Übertragen auf eine Website.
+## Ziel der Übung ist das Auslesen der Sensorwerte und Übertragen auf eine Website.
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
 ## der Aufbau unserer Anwendung:
@@ -22,7 +22,7 @@ categories: main
   node --version
 {% endhighlight %}  
 
-auch mit npm (sollte mit Node.js mitinstalliert worden sein)
+npm (sollte mit Node.js mitinstalliert worden sein)
 {% highlight javascript %}
   npm --version
 {% endhighlight %}
@@ -42,7 +42,6 @@ Für die Übung legen wir ein neues Node Projekt an:
 ## 1. Auslesen des Datenstreams in Node.js
 Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten mit Node auslesen zu können verwenden wir die Library [node-serialport]. Diese erlaubt es uns den seriellen Datenstream des Arduinos Zeile für Zeile auszulesen.
 
-Der Arduino sendet die Daten Zeile für Zeile an die serielle Schnittstelle:
 {% highlight json %}
 {timestamp: 387709, type: "heart rate sensor raw", unit: "raw", value: 500}
 {timestamp: 387710, type: "heart rate sensor bpm", unit: "bpm", value: 35}
@@ -61,7 +60,7 @@ In dem index.js file importieren wir jetzt das serialport modul
   var serialport = require('serialport');
 {% endhighlight %}
 
-Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns alle verbundenen Geräte anzeigen
+Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns die Geräte anzeigen
 {% highlight javascript %}
 serialport.list(function(err, ports) {
 
@@ -74,11 +73,17 @@ serialport.list(function(err, ports) {
 Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
 Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:
 
+Mac & Linux:
 {% highlight javascript %}
 var portName = '/dev/cu.usbmodem1421';
 {% endhighlight %}
 
-Anschließend verbinden wir uns mit dem Arduino Gerät
+Für Windows:
+{% highlight javascript %}
+var portName = 'COM3';
+{% endhighlight %}
+
+Anschließend verbinden wir uns mit dem Arduino
 
 {% highlight javascript %}
 var arduinoPort = new serialport.SerialPort(portName, {
@@ -94,7 +99,7 @@ arduinoPort.on('open', function() {
 });
 {% endhighlight %}
 
-Jetzt lassen wir uns mit der entsprechenden event und einer anonymen Funktion die Daten loggen:
+Wir erstellen eine Funktion die beim Empfangen von neuen Daten aufgerufen wird:
 
 {% highlight javascript %}
 arduinoPort.on('data', function(data) {
@@ -132,9 +137,9 @@ var http = require('http').Server(app);
 var socketio = require('socket.io')(http);
 {% endhighlight %}  
 
-Nicht verstanden? Hier eine [Erklärung zu Module]
+Wie funktioniert das Laden von Modulen? Hier eine [Erklärung zu Module]
 
-Zum Testen ob alles läuft starten wir den Server:
+Mit einer Http Get Route können wir überprüfen ob der Server richtig läuft:
 {% highlight javascript %}
 
 // return a Hello World Message when the base url is requested
@@ -161,23 +166,21 @@ socketio.on('connection', function(socket) {
 });
 {% endhighlight %}
 
-Mit einer einfachen [Websocket Anwendung] können wir kontrollieren ob wir die Daten empfangen auf der URL: *ws://localhost:3000*
-
 
 ## 3. Erstellen der Webanwendug
 
-Wir erstellen in unserem Projektordner einen Subordner mit dem Namen client und erstellen ein index.html und ein client.js file
+Wir erstellen in unserem Projektordner einen Subordner mit dem Namen 'client'. In diesem legen wir ein index.html und ein client.js file an.
 Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:
 {% highlight javascript %}
 app.get('/', function (req, res){
-    res.sendFile(dirname + "/client/index.html");
+    res.sendFile(\__dirname + "/client/index.html");
   });
 
 {% endhighlight %}
 
 Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die links zu den files im index.html geladen werden
 {% highlight javascript %}
-app.use(express.static(dirname + "/client"));
+app.use(express.static(\__dirname + "/client"));
 {% endhighlight %}
 
 Jetzt können wir die Webanwendung programmieren. Dazu geben wir folgende Scripts in unserem Html File an:
@@ -187,7 +190,7 @@ Jetzt können wir die Webanwendung programmieren. Dazu geben wir folgende Script
 <script type="text/javascript" src="/client.js"></script>
 {% endhighlight %}
 
-In unserem client.js file erstellen wir nun einen socket.io client und eine funktion zum empfangen der Daten
+In unserem client.js file erstellen wir nun einen socket.io Client und eine Funktion zum Empfangen der Daten
 
 {% highlight javascript %}
 var socket = io();
@@ -212,7 +215,7 @@ In unserem index.html File erstellen wir nun ein neues Element auf dem die Visua
 {% endhighlight %}
 
 
-Im client.js File erstellen wir nun ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.
+Im client.js File erstellen wir ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.
 
 {% highlight javascript %}
 var smoothie = new SmoothieChart();
@@ -222,7 +225,7 @@ var line1 = new TimeSeries();
 smoothie.addTimeSeries(line1);   
 {% endhighlight %}
 
-Um jetzt neue Werte zu zeichnen müssen diese an das line1 Obekt angefügt werden. Das machen wir in dem socket.io Callback
+Um jetzt neue Werte zu zeichnen, müssen diese an das line1 Objekt angefügt werden. Das machen wir in dem socket.io Callback
 {% highlight javascript %}
 socket.on('data', function(msg) {
     console.log(msg);
@@ -234,7 +237,7 @@ socket.on('data', function(msg) {
 {% endhighlight %}
 
 ### Danger Alert! Mein Arduino geht nicht Was jetzt???
-Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicth funktioniert gibt es die Möglichkeit Random Daten vom Node Server zum Client zu schicken
+Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicht funktioniert gibt es die Möglichkeit Random Daten von der Node Applikation zum Client zu schicken
 Dazu erstellen folgende Funktion:
 
 {% highlight javascript %}
@@ -250,7 +253,6 @@ function sendRandomData(socket) {
 Diese Funktion muss man dann in dem 'connection' Callback aufrufen wenn sich der Client verbindet
 
 
-
 So wir haben jetzt die Daten eingelesen und auch zum Client geschickt und visualisiert. Für viele Anwendungen ist es jedoch auch spannend die Sensorwerte in einem File zu speichern und zu einem späteren Zeitpunkt weiterzuverarbeiten.
 
 ### Hausübung:
@@ -260,8 +262,6 @@ Sobald sich der Server mit dem Arduino verbindet sollen die Werte in ein File ge
 Dazu kann das bestehende Projekt einfach umgeändert werden. Das ganze soll ohne Client  funktionieren. Die socket.io und express teile können also gelöscht werden.
 
 Die [FileSystem Komponente] von Node soll dazu verwendet werden
-
-
 
 [node-serialport]: https://github.com/voodootikigod/node-serialport/
 [Smoothie.js]: http://smoothiecharts.org/
