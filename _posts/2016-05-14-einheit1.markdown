@@ -37,6 +37,7 @@ Für die Übung legen wir ein neues Node Projekt an:
   npm init
 {% endhighlight %}
 * Anschließend den Auforderunen folgen
+* Lege ein neues File mit dem Namen index.js an.
 
 
 ## 1. Auslesen des Datenstreams in Node.js
@@ -50,7 +51,7 @@ Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten
 {timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}
 {% endhighlight %}
 
-Die Library installieren wir mit folgendem Command:
+Die Library installieren wir mit folgendem Command in unserem Projektordner:
 {% highlight javascript %}
   npm install serialport
 {% endhighlight %}
@@ -70,15 +71,20 @@ serialport.list(function(err, ports) {
 });
 {% endhighlight %}
 
+Zum Starten der Node-Anwendung brauchen wir folgenen Command:
+{% highlight javascript %}
+  node index.js
+{% endhighlight %}
+
 Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
 Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:
 
-Mac & Linux:
+Mac & Linux zB:
 {% highlight javascript %}
 var portName = '/dev/cu.usbmodem1421';
 {% endhighlight %}
 
-Für Windows:
+Für Windows zB:
 {% highlight javascript %}
 var portName = 'COM3';
 {% endhighlight %}
@@ -117,18 +123,18 @@ Um die Daten nun visualisieren zu können werden diese zu einem Javascript Clien
 Folgende Technologien verwenden wir:
 
 * [Socket.io] bzw WebSockets zum Übertragen der Daten
-* [Express] um die Webanwendug auf dem Node.js Server zu hosten
+* [Express] um die Webanwendug in unserer Node.js Applikation zu hosten
 * [Smoothie.js] für eine Echtzeit-Visualiserung
 
 Zu unserem index.js file müsen wir die notwendigen Komponenten hinzufügen. Dazu installieren wir Express und Socket.io
-Dazu führen wir folgende Commands in unserem Verzeichnis aus:
+Dazu führen wir folgende Commands in unserem Projektverzeichnis aus:
 
 {% highlight javascript %}
 npm install express --save
 npm install socket.io --save
 {% endhighlight %}  
 
-Anschließend erweitern wir unsere node Anwendung um einen express und socket.io server:
+Anschließend erweitern wir unsere Node Anwendung um einen express und socket.io server:
 
 {% highlight javascript %}
 var express = require('express');
@@ -178,7 +184,7 @@ app.get('/', function (req, res){
 
 {% endhighlight %}
 
-Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die links zu den files im index.html geladen werden
+Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die Scripts in dem index.html file geladen werden.
 {% highlight javascript %}
 app.use(express.static(\__dirname + "/client"));
 {% endhighlight %}
@@ -215,7 +221,7 @@ In unserem index.html File erstellen wir nun ein neues Element auf dem die Visua
 {% endhighlight %}
 
 
-Im client.js File erstellen wir ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir eine neues Objekt vom Typ TimeSeries.
+Im client.js File erstellen wir ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir ein neues Objekt vom Typ TimeSeries.
 
 {% highlight javascript %}
 var smoothie = new SmoothieChart();

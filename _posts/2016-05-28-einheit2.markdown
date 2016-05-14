@@ -5,4 +5,59 @@ date:   2016-05-28 17:50:00
 categories: main
 ---
 
+Advanced Visualization Frameworks für Javascript
+
+Warum gibt es soviele Vis Frameworks für JS????
+
+Bekannteste:
+
+d3.js: sehr mächtig aber auch kompliziert
+
+Wir werden plottable.js verwenden baut auf d3.js auf verwendet selbes prinzip
+aber einfacher schöne Plots zu zeichnen
+
+Realtime vs Statisch
+
+Grundsätzlich 2 Möglichkeiten zum Visualisieren:
+
+Fertiger Datensatz
+1x mal rendern (zeichnen) fertig
+
+Life Daten -> konstant rendern um Plot zu updaten
+
+Heute Statische Plots:
+
+wir laden fertige Files und zeichnen diese dann
+
+woher Datensätze bekommen?
+
+physionet.com
+
+1. Übung:
+
+Wir downloaden einen Datensatz von physionet und visualisieren diesen
+
+CTG von Geburt Herztöne des Kindes
+
+welcher Wertebereich:? Welche Einheit
+Welche zeit
+
+
+Hausübung: verwende plottable zum visualisieren des Raw Pulses
+
+
+Plottable:
+
+Konzept:
+
+Components:
+A Component is an object that requires visual space and can be placed on a table. Examples of Components include Axes, Labels, Legends, Gridlines, and Plots.
+
+Components can be overlaid on top of each other by placing them in a single Group, which is a Component in itself.
+
+
+
+
+
+
 Watch out!
