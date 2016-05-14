@@ -3,7 +3,7 @@ title:        FSDT3 Teil2
 tagline:      Analyse, Verarbeitung und Präsentation von digitalen Daten im Gesundheitswesen
 baseurl:      "/fsdt3"
 paginate:     1
-future:       true
+future:       false
 
 # About/contact
 author:
