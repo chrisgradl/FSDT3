@@ -5,6 +5,14 @@ date:   2016-05-14 08:00:00
 categories: main
 ---
 
+## Code für Arduino
+
+Hier bekommt ihr den Code für den Arduino
+
+https://gist.github.com/chrisgradl/7868360b9e42ff8585b55377fc2b8761
+
+
+
 ## Ziel der Übung ist das Auslesen der Sensorwerte und Übertragen auf eine Website.
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
