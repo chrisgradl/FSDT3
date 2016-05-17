@@ -40,7 +40,7 @@ Für die Übung legen wir ein neues Node Projekt an:
 {% highlight javascript %}
   npm init
 {% endhighlight %}
-* Anschließend den Auforderunen folgen
+* Anschließend den Auforderungen folgen
 * Lege ein neues File mit dem Namen index.js an.
 
 

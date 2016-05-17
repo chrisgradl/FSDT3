@@ -5,7 +5,7 @@ date:   2016-05-13 17:50:00
 categories: main
 ---
 
-## Kontak
+## Kontakt
 
 * Email: <christian.gradl@fhstp.ac.at>
 * Fragen über ecampus
