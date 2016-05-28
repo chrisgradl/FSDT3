@@ -45,9 +45,10 @@ Smoothie.js ist eine sehr einfache Library mit Fokus auf Echtzeitvisualisierunge
 [d3js] ist die am meisten verwendete Library für Visualisierungen im Web. Sehr mächtig aber zu beginn auch komplexe Funktionalität. Sehr individuelle und interaktive Visualisierungen sind möglich.
 
 Wir verwenden zum Visualisieren [plottablejs] eine Vis Library die auf D3.js basiert und einfacher zum Verwenden ist.
+
 ### SVG:
 Zur Visualisierung auf Webseiten hat sich in den letzten Jahren eine neue Technologie entwickelt, die auf HTML 5 aufsetzt: SVG – Scalable Vector Graphics. SVG ist die vom World Wide Web Consortium (W3C) empfohlene Spezifikation zur Beschreibung 2-dimensionaler Vektorgrafiken. SVG basiert auf XML und die gebräuchlichsten Web-Browser können den Großteil des Sprachumfangs darstellen.
-SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man einen <svg>-Bereich, innerhalb dessen dann die Grafiken eingebettet werden:
+SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man einen <svg>-Bereich, innerhalb dessen dann die Grafiken eingebettet werden
 
 {% highlight html %}
 <svg width="400" height="400">
