@@ -48,7 +48,7 @@ Wir verwenden zum Visualisieren [plottablejs] eine Vis Library die auf D3.js bas
 
 ### SVG:
 Zur Visualisierung auf Webseiten hat sich in den letzten Jahren eine neue Technologie entwickelt, die auf HTML 5 aufsetzt: SVG – Scalable Vector Graphics. SVG ist die vom World Wide Web Consortium (W3C) empfohlene Spezifikation zur Beschreibung 2-dimensionaler Vektorgrafiken. SVG basiert auf XML und die gebräuchlichsten Web-Browser können den Großteil des Sprachumfangs darstellen.
-SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man einen <svg>-Bereich, innerhalb dessen dann die Grafiken eingebettet werden
+SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man einen SVG Tag, innerhalb dessen dann die Grafiken eingebettet werden
 
 {% highlight html %}
 <svg width="400" height="400">
@@ -87,6 +87,7 @@ Komponenten sind:
 
 Eine Sammlung von Komponenten findet ihr hier:<http://plottablejs.org/components/>
 Wird eine Visualisierung programmiert legt man die notwendigen Komponenten an. Ein Linegraph würde aus folgenden Parts bestehen:
+
 - ein Line Plot
 - 2 Achsen mit Beschriftung
 
@@ -114,6 +115,7 @@ plottablejs hat einige Methoden mit der eine Visualisierung um interaktive Funkt
 ## Einfaches Beispiel zu plottable.js:
 
 Schritte:
+
 - Wie in Übung 1 legen wir über npm ein neues Node.js Projekt an in dem neuen Ordner teil2. Außerdem installieren wir express.js über den npm package manager
 - Erstelle einen Unterordner /client und in diesem dann die Files index.html und client.js
 - Erstelle das index.js File für den Node.js Server
@@ -198,19 +200,17 @@ var chart = new Plottable.Components.Table([
   [yAxis, plot],
   [null, xAxis]
 ]);
-{% endhighlight %}
 
 //render to specific svg
-
-{% highlight javascript %}
 chart.renderTo("svg#tutorial-result");
+
 {% endhighlight %}
+
 
 in unserem HTML File müssen wir nun ein entsprechendes SVG Element mit der richtigen Id anlegen:
 {% highlight javascript %}
     svg id="tutorial-result" height="400"></svg>
 {% endhighlight %}
-
 
 
 ### Welche Möglichkeit Daten zu Laden in plottablejs / d3.js?
@@ -231,6 +231,7 @@ in unserem HTML File müssen wir nun ein entsprechendes SVG Element mit der rich
 Da ein Teil der Abgabe die Visualisierung eines Datensatzes vom Arduino ist werden wir stattdessen  einen CTG Datensatz visualisieren:
 
 Der Datensatz besteht aus:
+
 - Herztöne des Babys (FHR = fetal Heart Rate)
 - Wehen (UC = Uterus Contraction)
 
@@ -274,9 +275,7 @@ d3.csv("/client/data/ctg.csv", function(e, d) {
 });
 {% endhighlight %}
 
-Versuche nun selbständig den Datensatz zu visualisieren. Gib acht welche Werte du in den Funktionen der Plotvariable für x und y zurückgibst!
-
-
+Versuche nun selbständig die Daten UC oder FHR zu visualisieren. Gib acht welche Werte du in den Funktionen der Plotvariable für x und y zurückgibst!
 
 ### Möglichkeit zum Speichern und Abrufen von Sensordaten
 
