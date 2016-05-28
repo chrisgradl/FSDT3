@@ -11,6 +11,7 @@
   <link rel="stylesheet" href="/fsdt3/css/cayman.css">
 </head>
 
+
   <body>
     <section class="page-header">
   <h1 class="project-name">FSDT3 Teil2</h1>
@@ -127,6 +128,9 @@ Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNa
       <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">obj</span><span class="p">.</span><span class="nx">value</span><span class="p">);</span>
 <span class="p">});</span></code></pre></figure>
 
+<h3 id="parse-error">Parse Error</h3>
+<p>In der Übung ist immer wieder ein Error aufgetreten beim Einlesen der Daten. Das lag an den angefangenen Zeilen die wir mit dem Arduino versendet haben. Hier ist es besser immer eine komplette Zeile zu senden.</p>
+
 <h2 id="senden-der-daten-an-eine-webanwendung">2. Senden der Daten an eine Webanwendung</h2>
 
 <p>Um die Daten nun visualisieren zu können werden diese zu einem Javascript Client übertragen</p>
@@ -183,12 +187,12 @@ Dazu führen wir folgende Commands in unserem Projektverzeichnis aus:</p>
 Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:</p>
 
 <figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">get</span><span class="p">(</span><span class="s1">'/'</span><span class="p">,</span> <span class="kd">function</span> <span class="p">(</span><span class="nx">req</span><span class="p">,</span> <span class="nx">res</span><span class="p">){</span>
-    <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client/index.html"</span><span class="p">);</span>
+    <span class="nx">res</span><span class="p">.</span><span class="nx">sendFile</span><span class="p">(</span><span class="err">\</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client/index.html"</span><span class="p">);</span>
   <span class="p">});</span></code></pre></figure>
 
 <p>Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die Scripts in dem index.html file geladen werden.</p>
 
-<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client"</span><span class="p">));</span></code></pre></figure>
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">app</span><span class="p">.</span><span class="nx">use</span><span class="p">(</span><span class="nx">express</span><span class="p">.</span><span class="kr">static</span><span class="p">(</span><span class="err">\</span><span class="nx">__dirname</span> <span class="o">+</span> <span class="s2">"/client"</span><span class="p">));</span></code></pre></figure>
 
 <p>Jetzt können wir die Webanwendung programmieren. Dazu binden wir folgende Scripts in unser Html File ein:</p>
 
