@@ -145,6 +145,13 @@ app.listen(3000, function () {
 
 {% endhighlight %}
 
+Im Header müssen wir noch ein plottablejs spezifisches CSS File anlegen
+
+{% highlight html %}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/plottable.js/2.2.0/plottable.css">
+{% endhighlight %}
+
+
 Zu Beginn wollen wir einen einfachen Lineplot machen mit einem statischen Datenset:
 
 {% highlight javascript %}
