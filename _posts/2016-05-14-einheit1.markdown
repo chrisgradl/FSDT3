@@ -120,6 +120,9 @@ arduinoPort.on('data', function(data) {
 });
 {% endhighlight %}
 
+### Parse Error
+In der Übung ist immer wieder ein Error aufgetreten beim Einlesen der Daten. Das lag an den angefangenen Zeilen die wir mit dem Arduino versendet haben. Hier ist es besser immer eine komplette Zeile zu senden.
+
 ## 2. Senden der Daten an eine Webanwendung
 
 Um die Daten nun visualisieren zu können werden diese zu einem Javascript Client übertragen
@@ -183,14 +186,14 @@ Wir erstellen in unserem Projektordner einen Subordner mit dem Namen 'client'. I
 Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:
 {% highlight javascript %}
 app.get('/', function (req, res){
-    res.sendFile(__dirname + "/client/index.html");
+    res.sendFile(\__dirname + "/client/index.html");
   });
 
 {% endhighlight %}
 
 Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die Scripts in dem index.html file geladen werden.
 {% highlight javascript %}
-app.use(express.static(__dirname + "/client"));
+app.use(express.static(\__dirname + "/client"));
 {% endhighlight %}
 
 Jetzt können wir die Webanwendung programmieren. Dazu binden wir folgende Scripts in unser Html File ein:
