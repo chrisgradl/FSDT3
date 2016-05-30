@@ -5,7 +5,7 @@ date:   2016-05-27 17:50:00
 categories: main
 ---
 
-## Abgabe
+# Abgabe
 
 - Visualisiere einen mit dem Arduino aufgezeichneten Datensatz mit plottable.js in einem Linegraph. Verwende dazu die Funktion d3.json oder d3.csv. Baue außerdem eine Interaktion ein ( zb: Zoom oder Datenpunkt auswählen)
 - Erweitere die Anwendung aus teil1: Anstatt mit smoothie.js soll die client Visualisierung mit plottable.js erfolgen: Dabei soll die Visualisierung in einem gewissen Interval upgedated werden (z.b.: jede Sekunde).
@@ -14,7 +14,24 @@ categories: main
 - Code soll ausreichend kommentiert und nachvollziehbar sein
 - Projekt wird in Abgabegespräch gezeigt
 
-## Prüfung
+## Tipp für die Echtzeit-Visualiserung
+
+- Um die Daten eines Plots in plottablejs upzudaten muss nicht ein neues Datenset erstellt werden oder die render Funktion neu ausgeführt werden es reicht das Datenset upzudaten:
+
+{% highlight javascript %}
+
+//init the Visualization do it only one time
+var dataset = new Plottable.Dataset(dataarray);
+plot.addDataset(dataset);
+
+
+//call this function everytime the dataarray changes
+dataset.data(dataarray);
+{% endhighlight %}
+
+# Prüfung
+
+Für die Prüfung sollen die Beispiele aus dem Unterricht und der Hausübung verstanden und erklärt werden können. Außerdem sollen die grundlegenden Konzepte der verwendeten Technologien erklärt werden können
 
 ### Was ist Node.js?
 
