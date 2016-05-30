@@ -115,13 +115,19 @@ Wir erstellen eine Funktion die beim Empfangen von neuen Daten aufgerufen wird:
 arduinoPort.on('data', function(data) {
       // i am called everytime a new line is sent from the arduino
       // data is read as String so we parse it to get a JSON Object
-      var obj = JSON.parse(data);
-      console.log(obj.value);
+      // wrap it in try catch block in case line is parsed not correct#
+      try{
+        var obj = JSON.parse(data);
+        console.log(obj.value);
+      }catch(e){
+        console.log(e);
+      }
+
 });
 {% endhighlight %}
 
 ### Parse Error
-In der Übung ist immer wieder ein Error aufgetreten beim Einlesen der Daten. Das lag an den angefangenen Zeilen die wir mit dem Arduino versendet haben. Hier ist es besser immer eine komplette Zeile zu senden.
+In der Übung ist immer wieder ein Error aufgetreten beim Einlesen der Daten. Daher muss man die Json.parse() Funktion in einen try -catch Block setzten um den Error abfangen zu können
 
 ## 2. Senden der Daten an eine Webanwendung
 
@@ -173,8 +179,13 @@ socketio.on('connection', function(socket) {
     console.log("WebSocket connected");
     //start to read the data from the arduino and send to connected client
     arduinoPort.on('data', function(data) {
+      try{
         var obj = JSON.parse(data);
           socket.emit('data', obj);
+      }catch(e){
+        console.log(e);
+      }
+
     });
 });
 {% endhighlight %}

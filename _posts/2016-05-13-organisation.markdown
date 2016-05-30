@@ -20,5 +20,5 @@ Die Note in diesem Teil setzt sich zusammen aus:
 |                             | Anteil  |
 |:---------------------------:| -------:|
 | Hausübung                   |   10%   |
-| Abschlussaufgabe + Gespräch |   20%   |
+| Abschlussaufgabe            |   20%   |
 | Mündliche Prüfung           |   20%   |
