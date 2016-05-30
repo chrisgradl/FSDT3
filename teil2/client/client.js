@@ -1,5 +1,6 @@
 var xScale = new Plottable.Scales.Linear();
-var yScale = new Plottable.Scales.Linear().domain([0, 1]);
+var yScale = new Plottable.Scales.Linear();
+
 
 var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
 var yAxis = new Plottable.Axes.Numeric(yScale, "left");

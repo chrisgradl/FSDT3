@@ -17,6 +17,8 @@ serialport.list(function(err, ports) {
     });
 });
 
+
+
 app.get('/', function(req, res) {
     res.sendFile(__dirname + "/client/index.html");
 });
@@ -25,10 +27,14 @@ app.use(express.static(__dirname + "/client"));
 
 http.listen(3000);
 
-var myPort = new serialport.SerialPort(portName, {
-    baudrate: 9600,
-    parser: serialport.parsers.readline("\r\n")
-});
+var myPort;
+
+if (simulateArduino == false) {
+    myPort = new serialport.SerialPort(portName, {
+        baudrate: 9600,
+        parser: serialport.parsers.readline("\r\n")
+    });
+}
 
 socketio.on('connection', function(socket) {
     console.log("WebSocket connected");
@@ -38,27 +44,28 @@ socketio.on('connection', function(socket) {
     } else {
         myPort.on('data', function(data) {
             console.log(data);
-            var obj = JSON.parse(data);
-            socket.emit('data', obj);
+            try {
+                var obj = JSON.parse(data);
+                socket.emit('data', obj);
+            } catch (e) {
+                console.log(e);
+            }
+
         });
     }
-});
-
-myPort.on('open', function() {
-    console.log("Arduino Port is open");
-});
-
-myPort.on('error', function(err) {
-    console.error(err);
 });
 
 
 // when arduino is not working send random data to the client for visualization
 // therefore uncomment this code and add set simulateArduino = true  in websocket onConnected Callback
 var sensorJson = JSON.parse('{"timestamp": 19123,"type": "heart rate sensor raw","unit": "raw","value": 987}');
+var relTimestamp = 0;
+
 function sendRandomData(socket) {
     setInterval(function() {
         sensorJson.value = Math.random();
+        sensorJson.timestamp = relTimestamp;
         socket.emit('data', sensorJson);
+        relTimestamp++;
     }, 100);
 }
