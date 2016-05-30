@@ -12,7 +12,7 @@ categories: main
 - Die Abgabe erfolgt auf dem ecampus bis zum 10.Juni.
 - Die Abgabe erfolgt als zip file. Name der Datei ist matrikelnummer.zip
 - Code soll ausreichend kommentiert und nachvollziehbar sein
-- Projekt wird in Abgabegespräch gezeigt
+- Da die Zeit zwischen letzter Übung und Prüfung relative kurz ist muss das Beispiel nur abgegeben und ausreichend dokumentiert werden. Daher ist bis Semesterende Zeit für die Abgabe  
 
 ## Tipp für die Echtzeit-Visualiserung
 
@@ -31,7 +31,7 @@ dataset.data(dataarray);
 
 # Prüfung
 
-Für die Prüfung sollen die Beispiele aus dem Unterricht und der Hausübung verstanden und erklärt werden können. Außerdem sollen die grundlegenden Konzepte der verwendeten Technologien erklärt werden können
+Für die Prüfung sollen die Beispiele aus dem Unterricht und der 1.Hausübung verstanden und erklärt werden können. Außerdem sollen die grundlegenden Konzepte der verwendeten Technologien erklärt werden können
 
 ### Was ist Node.js?
 
