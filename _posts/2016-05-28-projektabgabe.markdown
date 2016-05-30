@@ -45,8 +45,6 @@ Für die Prüfung sollen die Beispiele aus dem Unterricht und der 1.Hausübung v
 
 ### Wie haben wir die Daten vom Arduino ausgelesen?
 
-### Was ist ein Event und warum werden diese in Node.js häufig verwendet?
-
 ### Wir haben ein paar Mal Callbacks / Events verwendet wobei?
 
 ### Wie können Daten in plottablejs geladen werden?
