@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Organisation der LV"
-date:   2016-05-13 17:50:00
+date:   2017-04-28 17:50:00
 categories: main
 ---
 
@@ -21,4 +21,4 @@ Die Note in diesem Teil setzt sich zusammen aus:
 |:---------------------------:| -------:|
 | Hausübung                   |   10%   |
 | Abschlussaufgabe            |   20%   |
-| Mündliche Prüfung           |   20%   |
+| Mündliche Prüfung via Skype |   20%   |

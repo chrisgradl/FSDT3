@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Einheit 2: Sensordaten visualisieren mit Javascript"
-date:   2016-05-27 17:50:00
+date:   2017-05-27 17:50:00
 categories: main
 ---
 
