@@ -1,24 +1,23 @@
 ---
 layout: default
-title:  "Organisation der LV"
-date:   2017-04-28 17:50:00
+title:  "Organisation of this LV"
+date:   2017-04-28 08:00:00
 categories: main
 ---
 
-## Kontakt
+## Contact
 
 * Email: <christian.gradl@fhstp.ac.at>
-* Fragen über ecampus
-* Projekt und Hausübung am ecampus abgeben
+* Questions via the ecampus forum
 
-## Benotung:
+## Grades:
 
-Note = 50% der LV
+The grade in this part is 50% for the whole exercise
 
-Die Note in diesem Teil setzt sich zusammen aus:
+The grade consists of:
 
-|                             | Anteil  |
+|                             |         |
 |:---------------------------:| -------:|
-| Hausübung                   |   10%   |
-| Abschlussaufgabe            |   20%   |
-| Mündliche Prüfung via Skype |   20%   |
+| Homework                    |   10%   |
+| Project                     |   20%   |
+| Oral Exam via Skype         |   20%   |

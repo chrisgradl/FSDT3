@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Infos zur Projektabgabe & Prüfung"
-date:   2017-05-27 17:50:00
+date:   2017-04-28 08:00:00
 categories: main
 ---
 

@@ -1,0 +1,8 @@
+---
+layout: default
+title:  "Lesson 2 Online: Node.js Basics"
+date:   2017-05-24 08:00:00
+categories: main, online
+---
+
+## Main Aim of this Online Session is to get familiar with Node.JS and know how to start and run a server on a local machine
