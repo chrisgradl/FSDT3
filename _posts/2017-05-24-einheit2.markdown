@@ -1,8 +1,96 @@
 ---
 layout: default
-title:  "Lesson 2 Online: Node.js Basics"
-date:   2017-05-24 08:00:00
-categories: main, online
+title: Online Session 2
+date: 2017-05-24T08:00:00.000Z
+categories: 'main, online'
 ---
 
-## Main Aim of this Online Session is to get familiar with Node.JS and know how to start and run a server on a local machine
+# Online Session 2: Build webapps with Node.js
+
+## npm: node package manager
+
+The Node.js installation comes together with npm. npm stands for node package manager. It allows to install and download additional packages or modules which can be used in your projects. For our node application we need 3 additional modules. Think of npm as an App Store for Programming Libraries. You can download npm modules for your project: For our Arduino project we will use:
+
+- express.js
+- socket.io
+- serialport
+
+### TASK 5:
+
+- Open a command line and execute the npm command
+- read the information what do you see?
+- Find out the version which is installed of npm
+- Create a new directory called asens2_task_5
+- Switch into the dir on the command line and run following command
+
+npm install express
+
+- What happened inside the asens2_task_5 folder?
+
+### Local or Global installation
+
+There are two ways to install npm packages: locally or globally. You choose which kind of installation to use based on how you want to use the package. In the previous task we installed the express module locally. So npm created the folder node_modules and put a lot of stuff into it. This would allow us to use express module in our node application.
+
+If you want to depend on the package from your own module using something like Node.js' require, then you want to install locally, which is npm install's default behavior. On the other hand, if you want to use it as a command line tool, something like a utility tool then you want to install it globally.
+
+## Globally
+
+just for fun we install a module globally. By adding the -g flag to the command we tell npm to install it globally. This means the installed library is accessible from the command line like npm or node
+
+### TASK 6:
+
+- run the command npm install -g bebusy
+
+- then start the app on the command line bebusy
+
+## the package.json file
+
+The best way to manage locally installed npm packages is to create a package.json file. A package.json file affords you a lot of great things. It serves as documentation for what packages your project depends on. It allows you to specify the versions of a package that your project can use using semantic versioning rules. Makes your build reproducible which means that its way easier to share with other developers.
+
+### TASK 7: Create a project with npm
+
+- create a folder asens_task_7
+- switch into it with the command line
+- run following command: npm init
+- Follow the installation guide (only hit enter)
+- Open the package.json file and look at the content
+- Back to Command line and run npm install express --save
+- What happened in the directory and what did change in the package.json files
+
+We just created a project with npm. The description is in the package.json file. When we run the npm install command with the --save flag npm adds express to the dependencies.
+
+## express
+
+For our Arduino project we will use the express module. Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. We will use express mainly for serving static files for our web app. It is similar to the http module.
+
+### TASK 8: Hello World with Express and static file
+
+- create a new dir called asens_task_8
+- switch into it on command line and run npm init
+- install express as local dependency
+- create a index.js file
+- create a folder public
+- create the file app.html in the public folder with hello world as h1 tag and valid html tags
+- open the index.js file and add following code
+
+<script src="https://gist.github.com/chrisgradl/1f6bd821a711ec80a46f1802e318f14e.js"></script>
+
+- add a image of a sweet cat to your public folder
+- create an additional route with the url /sweetcat which returns the image
+- create the dir js in the public folder
+- add a client.js file into this folder
+- write something to the console in this javascript file
+- load the script into your index.html file and check if the output is visible on the console in the browser
+
+
+We have created the basic skeleton for our web app with express.  
+
+## socket.io
+
+Socket.io is another external module which we will use in our app.  
+
+
+
+## Exercise:
+
+HomeWork: Create a Heroku account and follow the guide to host a node web app in the cloud

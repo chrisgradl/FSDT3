@@ -1,6 +1,6 @@
 ---
 layout: default
-title:  "Infos zur Projektabgabe & Prüfung"
+title:  "Information regarding exercise and exam"
 date:   2017-04-28 08:00:00
 categories: main
 ---
