@@ -31,7 +31,7 @@ In the command line you can move between folders similar to a file explorer. Dep
 ### TASK 0: Learning Command Line
 
 - Open the Command Line and check in which location you are
-- create a new dir with the name `asens2_task_0` at your Desktop (with the Command Line!!!)
+- create a new dir with the name `asen2_task_0` at your Desktop (with the Command Line!!!)
 - switch into this directory with your command line
 - run following command `node --version` and send me a message with the output
 
@@ -63,7 +63,7 @@ Your Node code will be executed. This can be a simple "Hello World" output to th
 
 ### TASK 1: Hello World in Node.js
 
-For our first Node.js application create a new directory with the name: `asens2_task_1`. Switch to this directory and create a new index.js file. Write a simple output to the console
+For our first Node.js application create a new directory with the name: `asen2_task_1`. Switch to this directory and create a new index.js file. Write a simple output to the console
 {% highlight javascript %} console.log("Hello World"); {% endhighlight %}
 On the command line switch to the directory and start your node application.
 What is happening?
@@ -71,7 +71,7 @@ What is happening?
 ### TASK 2: Hello World via http
 
 Often you want to serve or process data over http with a node application. To do so you have to start a http server in your node application.
-Create a new directory with the name: `asens2_task_2`. Switch to this directory and create a new index.js file.To start a http server you have to load the http module and call the `createServer` function.
+Create a new directory with the name: `asen2_task_2`. Switch to this directory and create a new index.js file.To start a http server you have to load the http module and call the `createServer` function.
 
 {% highlight javascript %}
 
@@ -144,7 +144,7 @@ Javascript is single threaded which makes it inherently synchronous. This means 
 
 We will read the input of a file in two different ways to show the difference between synchronous and asynchronous.
 
-- Create directory with name `asens2_task_4`
+- Create directory with name `asen2_task_4`
 - Copy a text based file of your choice into this directory
 - Create a index.js file with following Code:
 
