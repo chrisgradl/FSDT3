@@ -85,12 +85,23 @@ For our Arduino project we will use the express module. Express is a minimal and
 
 We have created the basic skeleton for our web app with express.  
 
-## socket.io
 
-Socket.io is another external module which we will use in our app.  
+## Homework:
 
+In the next session we will use Node only on our local machines. Anyway we want to learn how we can deploy a node application to run in the beautiful WWW. This is your home exercise.
 
+Disclaimer: This will eventually fail on some machines and maybe also in the FH Network. Do not become desperate if it fails. Try to locate the error and google it. If you can not finish or have problems please ask your classmates or write into the forum
 
-## Exercise:
+- Create an account on heroku.com
+- Follow this tutorial https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app
+- Finish the step Deploy the App
+- Check out the source code of the project. Looks this familiar to you?
+- Create a file hello.html in the public folder
+- add a h1 element with 'Hello + your name' as content
+- return this html file for the base route '/'
+- redeploy your application to heroku
+- Check if your html site is returned on the url
+- Hand in the link to your heroku website
 
-HomeWork: Create a Heroku account and follow the guide to host a node web app in the cloud
+Why do we have to learn this? What has this to do with Sensors:
+In the next lesson we will connect the Arduino to our node application. Then we will read the data input from the arduino. If we have enough time we will display the sensor values on the heroku app. So you can show all your friends your Heartbeat in real time...  

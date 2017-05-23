@@ -31,75 +31,82 @@ In the command line you can move between folders similar to a file explorer. Dep
 ### TASK 0: Learning Command Line
 
 - Open the Command Line and check in which location you are
-- create a new dir with the name 'asens2_01' at your Desktop (with the Command Line!!!)
+- create a new dir with the name `asens2_task_0` at your Desktop (with the Command Line!!!)
 - switch into this directory with your command line
-- run following command 'node --version' and send me a message with the output
+- run following command `node --version` and send me a message with the output
 
 ## Check if Node.js is already installed
 
-We have to check if Node is already installed on our machines. Open a Terminal or CommandLine and type following Command
+When you run the Installer Node is installed and also added to your path. This allows us to run Node on the Command Line. Node has no Interface/UI where you can start or stop or load a Node script. Instead you have to write Commands on the Command Line to run Node. Therefore we have to check if Node is installed and accessible on your Command Line.
 
 {% highlight javascript %} node --version {% endhighlight %}
 
-Together with Node also the NPM package manager is installed which we will also use.
+Together with Node also the npm package manager is installed which we will also use.
 
 check if npm is already installed {% highlight javascript %} npm --version {% endhighlight %}
 
-What does this mean anyway?
-
-When you run the Installer Node is installed and also added to your path. This allows us to run Node on the Command Line. Node has no Interface/UI where you can start or stop or load a Node script. Instead you have to write Commands on the Command Line to run Node. Therefore we have to check if Node is installed and accessible on your Command Line. The correct command is:
-
-{% highlight javascript %} node --version{% endhighlight %}
-
 ### Install Node.js
 
-Go to the Website and Download and Install Node <https://nodejs.org/en/download/>
+Go to the [node website](https://nodejs.org/en/download/) and download and install Node.
 
 ## Node and the Command Line
 
-node can be controlled via the command line. To start a node server run following command:
+node can be controlled via the command line. To start a node application run following command:
 
 {% highlight javascript %} node /path/to/file.js {% endhighlight %}
 
 For example
 
-{% highlight javascript %} cd /dir/to/application node index.js {% endhighlight %}
+{% highlight javascript %} cd /path/to/application node index.js {% endhighlight %}
 
-Your Node code will be executed. This can be a simple "Hello World" output to the console or starting a http server. If you start a long running or endless process you can stop the Node application by hitting ctrl + c.
+Your Node code will be executed. This can be a simple "Hello World" output to the console or starting a http server. If you start a long running or endless process you can stop the Node application by hitting `ctrl + c`.
 
-## TASK 1: Hello World in Node.js
+### TASK 1: Hello World in Node.js
 
-For our first Node.js application create a new directory with the name: asen_node_ue_1\. Switch to this directory and create a new index.js file. Write a simple output to the console
-
+For our first Node.js application create a new directory with the name: `asens2_task_1`. Switch to this directory and create a new index.js file. Write a simple output to the console
 {% highlight javascript %} console.log("Hello World"); {% endhighlight %}
-
 On the command line switch to the directory and start your node application.
-
 What is happening?
 
-## TASK 2: Hello World via http
+### TASK 2: Hello World via http
 
 Often you want to serve or process data over http with a node application. To do so you have to start a http server in your node application.
+Create a new directory with the name: `asens2_task_2`. Switch to this directory and create a new index.js file.To start a http server you have to load the http module and call the `createServer` function.
 
-Switch to your browser and enter the url: localhost:DEFINED_PORT. You should see the Hello World String returned in your Browser.
+{% highlight javascript %}
 
-Compared to the first Hello World this program does not end. Since we started a http server the program keeps running. To stop a running node application hit ctrl + c in your Command Line.
+var http = require('http');
 
-## Node is using Modules to load additonal components
+//create Server with anonymous function as parameter
+http.createServer(function(request, response){
+  response.end('Hello World');
+  }).listen(8080);
 
-We already used one module from node.js: the http module. Modules are additional components which can be used in Node.js. We have the core modules which are provided by Node.js and additional modules which can be loaded into our application. We can even write our own modules which we then can use. Think of modules as Javascript libraries such as jquery. You can see a full list of the Node core modules in the official docs. You can load a module with the require function
+{% endhighlight %}
 
-{% highlight javascript %} var varWhereModuleIsSaved = require('module name as string'); {% endhighlight %}
+Start your Node application and open the url: <http://localhost:8080> You should see the Hello World String returned in your Browser.
+
+Compared to the first Hello World this program does not end. Since we started a http server the program keeps running. To stop a running node application hit `ctrl + c` in your Command Line.
+
+## Node is using Modules to load additional components
+
+We already used one module from node.js: the http module. Modules are additional components which can be used in Node.js. We have the core modules which are provided by Node.js and additional modules which can be loaded into our application. We can even write our own modules which we then can use. Think of modules as Javascript libraries such as jquery. You can see a full list of the Node core modules in the official [documentation](https://nodejs.org/dist/latest-v6.x/docs/api/). You can load a module with the require function
+
+{% highlight javascript %}
+var varWhereModuleIsSaved = require('module name as string');
+{% endhighlight %}
 
 In our Arduino project we will use some 3rd party modules. We will learn how to load modules in the next session.
 
 ## Node.js is Event Based
 
-Node is Event Based. This means that you can subscribe to certain events and call a function when the event is fired. A common pattern in Node is to use following syntax:
+Node is Event Based. This means that you can subscribe to certain events and call a function when the event is fired:
 
-{% highlight javascript %} object.on('eventAsString', anonfunc); {% endhighlight %}
+{% highlight javascript %}
+object.on('eventAsString', anonfunc);
+{% endhighlight %}
 
-We have an object where we want to subscribe to a function. We call the on function and have two parameters: A String which tells the object which event we want to subscribe and the function which is called when the action happens. Based on the implementation this function can have several paramters.
+We have an object where we want to subscribe to a function. We call the function and have two parameters: A String which tells the object which event we want to subscribe and the function which is called when the action happens. Based on the implementation this function can have several paramters.
 
 We want to rewrite our hello world application to use events
 
@@ -111,42 +118,47 @@ var http = require('http');
 
 var server = http.createServer();
 
-server.on('request', function(req, resp) { console.log("Event: Request was triggered and this function was called"); resp.end("Hello World"); });
+server.on('request', function(req, resp) {
+   console.log("Event: Request was triggered and this function was called"); resp.end("Hello World"); });
 
-server.listen(8080, function(){ console.log("Event: Listen was triggered"); });
+server.listen(8080, function(){
+  console.log("Event: Listen was triggered");
+});
 
 console.log("Server running on port 8080");
 
 {% endhighlight %}
 
-- log an additional Event when a connection is established. The event is subscribed by 'connection'. The Callback function has no arguments.
+- log an additional evvent when a connection is established. The event is subscribed by `connection`. The Callback function has no arguments.
 - Start the server and open the website. In which order do the events get fired?
 
 ## Node.js is using the Event Emitter for events
 
-Much of the Node.js core API is built around an idiomatic asynchronous event-driven architecture in which certain kinds of objects (called "emitters") periodically emit named events that cause Function objects ("listeners") to be called. In our example above the http object emits an event each time a peer connects to it. We will use other objects in with this functionality in the next lessons. All objects that emit events are instances of the EventEmitter class. These objects expose an eventEmitter.on() function that allows one or more functions to be attached to named events emitted by the object. Typically, event names are camel-cased strings but any valid JavaScript property key can be used.
+Much of the Node.js core API is built around an idiomatic asynchronous event-driven architecture in which certain kinds of objects (called "emitters") periodically emit named events that cause Function objects ("listeners") to be called. In our example above the http object emits an event each time a peer connects to it. We will use other objects with this functionality in the next lessons. All objects that emit events are instances of the EventEmitter class. These objects expose an eventEmitter.on() function that allows one or more functions to be attached to named events emitted by the object. Typically, event names are camel-cased strings but any valid JavaScript property key can be used.
 
 ## Node is asynchronous and Non Blocking:
 
-Javascript is single threaded which makes it inherently synchronous. This means Javascript is excuted line by line until the application is finished. Since Node is based in Javascript, it inherits this single threaded synchronous behavior. When you have Long running blocking operations such as reading or writing files this would block the application until the operation is over. You usually dont want this behavior in a Server environment. Node is handling this problem with an event-driven architecture. When a blocking and time intensive operation is started the application does not wait for it to be finished. Instead it sends an event when the process is finished.
+Javascript is single threaded which makes it inherently synchronous. This means Javascript is executed line by line until the application is finished. Since Node is based in Javascript, it inherits this single threaded synchronous behavior. When you have long running blocking operations such as reading or writing files this would block the application until the operation is over. You usually do not want this behavior in a server environment. Node is handling this problem with an event-driven architecture. When a blocking and time intensive operation is started the application does not wait for it to be finished. Instead it sends an event when the process is finished.
 
 ### TASK 4: Reading a file in sync and async
 
-We will read the input of a file in two different ways to show how the difference between sync and async.
+We will read the input of a file in two different ways to show the difference between synchronous and asynchronous.
 
-- Create directory with name asen_task4
+- Create directory with name `asens2_task_4`
 - Copy a text based file of your choice into this directory
 - Create a index.js file with following Code:
 
 {% highlight javascript %}
 
 var fs = require('fs');
-
 var contents = fs.readFileSync('DATA', 'utf8');
 console.log(contents);
 console.log("Data was loaded in Sync");
-{% endhighlight javascript %}  
+
+{% endhighlight javascript %}
 
 - Create an event based version
-- look at this link how to load a File async
-- Compare the two versions and the order of the Log
+- look at this
+[link](https://nodejs.org/dist/latest-v6.x/docs/api/fs.html#fs_fs_readfile_file_options_callback/) how to load a file asynchronous
+- print out the data from the text file in the callback function
+- Compare the two versions and the order of the log.

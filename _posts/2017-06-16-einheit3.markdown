@@ -5,47 +5,45 @@ date:   2017-06-16 08:00:00
 categories: main
 ---
 
-## Ziel der Übung ist das Auslesen der Sensorwerte und Übertragen auf eine Website.
+# Sensor Display App
+
+Today we are building a node application which reads in the sensor data from the arduino and displays it on a website:
+
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
-## der Aufbau unserer Anwendung:
+The main building blocks of our app:
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
 
+## How to get Data from the Arduino to our Node Appliction and then to our website?
 
-## Anforderungen für diese Übung:
+We will use a 3rd party module called serialport to read the sensor data in from the Arduino.
 
-* NodeJS installiert
-* NPM installiert
+## How to display the data on a website?
 
-überprüfen ob Node.js installiert ist mit dem Command
-{% highlight javascript %}
-  node --version
-{% endhighlight %}  
+We will use the socket.io module to send the data from the node application to the website
 
-npm (sollte mit Node.js mitinstalliert worden sein)
-{% highlight javascript %}
-  npm --version
-{% endhighlight %}
+### TASK: Get Data from the Arduino:
 
-## Code für Arduino
+Depending on your current progress you should already print out sensor values in the serial log in the arduino IDE. If not please deploy following code to your arduino.
 
 <script src="https://gist.github.com/chrisgradl/b2b7ebea853982c814a238cf730e1cff.js"></script>
 
-## Anlegen eines neuen Node Projekts
+### TASK: Create the sensorvis application
 
-Für die Übung legen wir ein neues Node Projekt an:
+* create the dir sensorvis and switch into it on the command line
+* create a new npm project
+* add the following dependencies to the project with the --save flag
+  * express
+  * serialport
+  * socketio
+* check if all dependencies were added in the package.json file
+* create the directory 'public' and put the  hmtl file sensorvis.html into it
+* Then use express to return this file on your '/' route. Use the code from the last session if you need help.
 
-* Wechsle in das gewünschte Verzeichnis in der Command Line
-* Lege ein neues Projekt an mit dem Command:
-{% highlight javascript %}
-  npm init
-{% endhighlight %}
-* Anschließend den Auforderungen folgen
-* Lege ein neues File mit dem Namen index.js an.
 
 
-## 1. Auslesen des Datenstreams in Node.js
-Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten mit Node auslesen zu können verwenden wir die Library [node-serialport]. Diese erlaubt es uns den seriellen Datenstream des Arduinos Zeile für Zeile auszulesen.
+## Read in the arduino data stream
+The Sensor values will be read from the serial port of the USB interface of the arduino board. We will use the library [node-serialport] for it.
 
 {% highlight json %}
 {timestamp: 387709, type: "heart rate sensor raw", unit: "raw", value: 500}
@@ -55,17 +53,13 @@ Die Daten werden über die serielle Schnittstelle (USB) ausgelesen. Um die Daten
 {timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}
 {% endhighlight %}
 
-Die Library installieren wir mit folgendem Command in unserem Projektordner:
-{% highlight javascript %}
-  npm install serialport
-{% endhighlight %}
+To read the data in we have to do following steps:
+* Load the seriaport module
+* list the possible inputs to read from with the list function
+* create a new serialPort with the portname of our arduino
+* 
 
-In dem index.js file importieren wir jetzt das serialport modul
-{% highlight javascript %}
-  var serialport = require('serialport');
-{% endhighlight %}
 
-Anschließend müssen wir nun kontrollieren ob unser Arduino gefunden wird von dem Modul. Dazu lassen wir uns die Geräte anzeigen
 {% highlight javascript %}
 serialport.list(function(err, ports) {
 
@@ -75,10 +69,6 @@ serialport.list(function(err, ports) {
 });
 {% endhighlight %}
 
-Zum Starten der Node-Anwendung brauchen wir folgenen Command:
-{% highlight javascript %}
-  node index.js
-{% endhighlight %}
 
 Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
 Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:

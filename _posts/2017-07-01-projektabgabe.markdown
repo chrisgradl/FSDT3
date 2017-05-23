@@ -5,7 +5,9 @@ date:   2017-04-28 08:00:00
 categories: main
 ---
 
-# Abgabe
+TBA
+
+<!--# Abgabe
 
 - Visualisiere einen mit dem Arduino aufgezeichneten Datensatz mit plottable.js in einem Linegraph. Verwende dazu die Funktion d3.json oder d3.csv. Baue außerdem eine Interaktion ein ( zb: Zoom oder Datenpunkt auswählen)
 - Erweitere die Anwendung aus teil1: Anstatt mit smoothie.js soll die client Visualisierung mit plottable.js erfolgen: Dabei soll die Visualisierung in einem gewissen Interval upgedated werden (z.b.: jede Sekunde).
@@ -52,3 +54,5 @@ Für die Prüfung sollen die Beispiele aus dem Unterricht und der 1.Hausübung v
 ### Welche Komponenten für plottablejs kennst du?
 
 ### Was ist SVG?
+
+*/ -->
