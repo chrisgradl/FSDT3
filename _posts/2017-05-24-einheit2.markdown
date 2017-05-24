@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Online Session 2
-date: 2017-05-24
+date: 2017-05-24 00:00:00
 categories: 'main, online'
 ---
 
@@ -11,7 +11,7 @@ categories: 'main, online'
 
 --------------------------------------------------------------------------------
 
-The Node.js installation comes together with npm. npm stands for node package manager. It allows to install and download additional packages or modules which can be used in your projects. For our node application we need 3 additional modules.
+The Node.js installation comes together with npm. npm stands for node package manager. It allows to install and download additional packages or modules which can be used in your projects.
 
 > npm is an app store on the command line for programming
 
@@ -67,6 +67,18 @@ We just created a project with npm. npm created a package.json file. When we run
 
 For our Arduino project we will use the express module. Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. We will use express mainly for serving static files for our web app. It is similar to the http module.
 
+Routing refers to determining how an application responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).
+A route has following structure in express
+
+>`app.METHOD(PATH, HANDLER)`
+
+where:
+
+- app is an instance of express.
+- METHOD is an HTTP request method, in lowercase.
+- PATH is a path on the server.
+- HANDLER is the function executed when the route is matched.
+
 ### TASK 8: Hello World with Express and static file
 
 - create a new dir called `asen_task_8`
@@ -101,7 +113,7 @@ Socket.io uses several technologies to create this real-time connection dependin
 Compared to a http request where a client requests data from a server, the socket.io connection also allows to send data from the server to the client.
 We will use socket.io to send sensor values from our node application to a website to visualize the data.
 - The client(the website) will establish a socket.io connection to our node application.
-- Every time the sensor value changes the node application will send a message to the website.
+- Every time the sensor values are changing the node application will send a message to the website.
 
 ### TASK 9: Simple Socket.io example
 We want to develop a simple example with socket.io and express
@@ -116,6 +128,36 @@ We want to develop a simple example with socket.io and express
 - create a `app.html` file in the public dir
 - initialize express and return the app.html file  on the base route
 - test if your node app is returning your app.html website on the url
+- to use express together with socket.io we have to initialize the express module in a different way since we have to pass the http server module to socket.io:
+
+<script src="https://gist.github.com/chrisgradl/b8101e92feb7f998816b2d28fd6f8dd3.js"></script>
+
+we register a listener on the `connection` event of the socket object. In the callback we get the associated socket. With this socket object we can communicate with the connected client.
+
+We test our our socket.io server with a simple javascript client on our app.html site.
+
+- open the app.html file
+- load the socket.io library before `</body>`
+- since we have the node module on our node server we can load the associated client library directly
+{% highlight javascript %}
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+{% endhighlight %}
+- we then can create a socket.io client and connect to the server
+{% highlight javascript %}
+<script>
+  var socket = io.connect('http://localhost:3000');
+  socket.on('hello', function(data) {
+    console.log(data);
+    // when we receive a hello message from the server we send back a info message
+    socket.emit('info', "BLABALAB");
+  });
+</script>
+{% endhighlight %}
+
+
+
+
+
 
 
 
