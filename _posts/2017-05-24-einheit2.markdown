@@ -1,7 +1,7 @@
 ---
 layout: default
 title: Online Session 2
-date: 2017-05-24T08:00:00.000Z
+date: 2017-05-23T07:00:00.000Z
 categories: 'main, online'
 ---
 
@@ -9,55 +9,59 @@ categories: 'main, online'
 
 ## npm: node package manager
 
-The Node.js installation comes together with npm. npm stands for node package manager. It allows to install and download additional packages or modules which can be used in your projects. For our node application we need 3 additional modules. Think of npm as an App Store for Programming Libraries. You can download npm modules for your project: For our Arduino project we will use:
+--------------------------------------------------------------------------------
 
-- express.js
-- socket.io
-- serialport
+The Node.js installation comes together with npm. npm stands for node package manager. It allows to install and download additional packages or modules which can be used in your projects. For our node application we need 3 additional modules.
+
+> npm is an app store on the command line for programming
+
+For our Arduino project we will use:
+
+- [express.js](http://expressjs.com/)
+- [socket.io](http://socket.io)
+- [serialport](https://github.com/EmergingTechnologyAdvisors/node-serialport)
 
 ### TASK 5:
 
-- Open a command line and execute the npm command
+- Open a command line and execute `npm`
 - read the information what do you see?
 - Find out the version which is installed of npm
-- Create a new directory called asens2_task_5
-- Switch into the dir on the command line and run following command
-
-npm install express
+- Create a new directory called `asen2_task_5`
+- Switch into the dir on the command line and run `npm install express`
 
 - What happened inside the asens2_task_5 folder?
 
 ### Local or Global installation
 
-There are two ways to install npm packages: locally or globally. You choose which kind of installation to use based on how you want to use the package. In the previous task we installed the express module locally. So npm created the folder node_modules and put a lot of stuff into it. This would allow us to use express module in our node application.
+There are two ways to install npm packages: locally or globally. You choose which kind of installation to use based on how you want to use the package. In the previous task we installed the express module locally. So npm created the folder node_modules and put a lot of stuff into it. This would allow us to use the express module in our node application.
 
-If you want to depend on the package from your own module using something like Node.js' require, then you want to install locally, which is npm install's default behavior. On the other hand, if you want to use it as a command line tool, something like a utility tool then you want to install it globally.
+If you want to depend on the package from your own module using something like Node.js require, then you want to install locally, which is npm install's default behavior. On the other hand, if you want to use it as a command line tool, something like a utility tool then you want to install it globally.
 
 ## Globally
 
-just for fun we install a module globally. By adding the -g flag to the command we tell npm to install it globally. This means the installed library is accessible from the command line like npm or node
+just for fun we install a module globally. By adding the `-g` flag to the command we tell npm to install it globally. This means the installed library is accessible from the command line like npm or node
 
 ### TASK 6:
 
-- run the command npm install -g bebusy
-
-- then start the app on the command line bebusy
+- run the command `npm install -g bebusy`
+- then start the tool by running `bebusy` on the command line
 
 ## the package.json file
 
-The best way to manage locally installed npm packages is to create a package.json file. A package.json file affords you a lot of great things. It serves as documentation for what packages your project depends on. It allows you to specify the versions of a package that your project can use using semantic versioning rules. Makes your build reproducible which means that its way easier to share with other developers.
+The best way to manage locally installed npm packages is to create a package.json file. It contains a configuration of your npm project. A package.json file affords you a lot of great things. It serves as documentation for what packages your project depends on. It allows you to specify the versions of a package that your project can use. Makes your build reproducible which means that its way easier to share with other developers.
 
 ### TASK 7: Create a project with npm
 
-- create a folder asens_task_7
+- create a folder `asen_task_7`
 - switch into it with the command line
-- run following command: npm init
+- run following command: `npm init`
 - Follow the installation guide (only hit enter)
 - Open the package.json file and look at the content
-- Back to Command line and run npm install express --save
-- What happened in the directory and what did change in the package.json files
+- Back to Command line and run `npm install express --save`
+- What happened in the directory?
+- What did change in the package.json files
 
-We just created a project with npm. The description is in the package.json file. When we run the npm install command with the --save flag npm adds express to the dependencies.
+We just created a project with npm. npm created a package.json file. When we run the npm install command with the `--save` flag npm adds the express module to the dependencies.
 
 ## express
 
@@ -65,15 +69,16 @@ For our Arduino project we will use the express module. Express is a minimal and
 
 ### TASK 8: Hello World with Express and static file
 
-- create a new dir called asens_task_8
-- switch into it on command line and run npm init
+- create a new dir called `asen_task_8`
+- switch to the command line and run `npm init`
 - install express as local dependency
 - create a index.js file
 - create a folder public
 - create the file app.html in the public folder with hello world as h1 tag and valid html tags
 - open the index.js file and add following code
 
-<script src="https://gist.github.com/chrisgradl/1f6bd821a711ec80a46f1802e318f14e.js"></script>
+<script src="https://gist.github.com/chrisgradl/1f6bd821a711ec80a46f1802e318f14e.js">
+</script>
 
 - add a image of a sweet cat to your public folder
 - create an additional route with the url /sweetcat which returns the image
@@ -82,26 +87,69 @@ For our Arduino project we will use the express module. Express is a minimal and
 - write something to the console in this javascript file
 - load the script into your index.html file and check if the output is visible on the console in the browser
 
+We have created the basic skeleton for our web app with express.
 
-We have created the basic skeleton for our web app with express.  
+## Socket.io
+Socket.IO enables real-time bidirectional event-based communication. It consists in
+- a Node.js server
+- a Javascript client library for the browser (or a Node.js client)
+Socket.io uses several technologies to create this real-time connection depending which are available for the clients. For example:
+- WebSocket
+- Flash Socket
+- AJAX long-polling
+
+Compared to a http request where a client requests data from a server, the socket.io connection also allows to send data from the server to the client.
+We will use socket.io to send sensor values from our node application to a website to visualize the data.
+- The client(the website) will establish a socket.io connection to our node application.
+- Every time the sensor value changes the node application will send a message to the website.
+
+### TASK 9: Simple Socket.io example
+We want to develop a simple example with socket.io and express
+
+- create a new folder `asen_task_9`
+- switch to the folder on the command line
+- run `npm init`
+- run `npm install express --save`
+- run `npm install socket.io --save`
+- create a index.js file
+- create the directory `public`
+- create a `app.html` file in the public dir
+- initialize express and return the app.html file  on the base route
+- test if your node app is returning your app.html website on the url
 
 
-## Homework:
 
-In the next session we will use Node only on our local machines. Anyway we want to learn how we can deploy a node application to run in the beautiful WWW. This is your home exercise.
 
-Disclaimer: This will eventually fail on some machines and maybe also in the FH Network. Do not become desperate if it fails. Try to locate the error and google it. If you can not finish or have problems please ask your classmates or write into the forum
 
-- Create an account on heroku.com
-- Follow this tutorial https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app
-- Finish the step Deploy the App
+
+
+
+
+<!--
+### TASK 10:
+
+In the next session we will use Node only on our local machines. Anyway we want to learn how we can deploy a node application to run in the www. We will use Heroku for it. It is a [PaaS](https://en.wikipedia.org/wiki/Platform_as_a_service). Platform as a Service. You can
+
+- Create an account on [heroku](https://heroku.com)
+- [Follow this tutorial](https://devcenter.heroku.com/articles/getting-started-with-nodejs#deploy-the-app)
+- Finish until the step Deploy the App
 - Check out the source code of the project. Looks this familiar to you?
 - Create a file hello.html in the public folder
 - add a h1 element with 'Hello + your name' as content
-- return this html file for the base route '/'
+- return this html file for the base route '/' in your index.js
+- go to the command line and type
+  - `git add index.js`
+  - `git add hello.html`
+  - `git commit'
+  - now you are in a text editor on the command line
+  - press i (for insert)
+  - type first commit
+  - press esc
+  - type :x!
 - redeploy your application to heroku
 - Check if your html site is returned on the url
-- Hand in the link to your heroku website
 
-Why do we have to learn this? What has this to do with Sensors:
-In the next lesson we will connect the Arduino to our node application. Then we will read the data input from the arduino. If we have enough time we will display the sensor values on the heroku app. So you can show all your friends your Heartbeat in real time...  
+We have successfully deployed a node application to the web
+
+Why do we have to learn this? What has this to do with Sensors: In the next lesson we will connect the Arduino to our node application. Then we will read the data input from the arduino. If we have enough time we will display the sensor values on the heroku app.
+-->
