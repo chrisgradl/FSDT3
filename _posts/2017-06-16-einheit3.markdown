@@ -7,40 +7,41 @@ categories: main
 
 # Sensor Display App
 
-Today we are building a node application which reads in the sensor data from the arduino and displays it on a website:
+In this lesson we will build a simmple application to receive sensor data from the Arduino and display it on a website.
 
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
 
 The main building blocks of our app:
 ![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
 
-## How to get Data from the Arduino to our Node Appliction and then to our website?
+### How to get Data from the Arduino to our Node Appliction and then to our website?
 
 We will use a 3rd party module called serialport to read the sensor data in from the Arduino.
 
-## How to display the data on a website?
+### How to display the data on a website?
 
 We will use the socket.io module to send the data from the node application to the website
 
-### TASK: Get Data from the Arduino:
+## 1. Read in the data from the Arduino
+
+### TASK 1: Get Data from the Arduino:
 
 Depending on your current progress you should already print out sensor values in the serial log in the arduino IDE. If not please deploy following code to your arduino.
 
 <script src="https://gist.github.com/chrisgradl/b2b7ebea853982c814a238cf730e1cff.js"></script>
 
-### TASK: Create the sensorvis application
+### TASK 2: Initialize the Sensor Display App
 
-* create the dir sensorvis and switch into it on the command line
+* create the directory sensorvis and switch into it on the command line
 * create a new npm project
 * add the following dependencies to the project with the --save flag
   * express
   * serialport
   * socketio
 * check if all dependencies were added in the package.json file
-* create the directory 'public' and put the  hmtl file sensorvis.html into it
+* create the directory 'public' in the sensorvis directory
+* switch into the public dir and create a hmtl file sensordisplay.html  
 * Then use express to return this file on your '/' route. Use the code from the last session if you need help.
-
-
 
 ## Read in the arduino data stream
 The Sensor values will be read from the serial port of the USB interface of the arduino board. We will use the library [node-serialport] for it.
@@ -53,14 +54,16 @@ The Sensor values will be read from the serial port of the USB interface of the 
 {timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}
 {% endhighlight %}
 
-To read the data in we have to do following steps:
-* Load the seriaport module
-* list the possible inputs to read from with the list function
-* create a new serialPort with the portname of our arduino
-* 
+### TASK 3: List all available devices with the serial port library
 
+We have to find the right port (e.g. USB port) from which we can read in the data from the arduino.
+
+* Load the seriaport module
+* list the available devices to read from with the list function
 
 {% highlight javascript %}
+
+var serialport = require('serialport');
 serialport.list(function(err, ports) {
 
   ports.forEach(function(port) {
@@ -69,100 +72,87 @@ serialport.list(function(err, ports) {
 });
 {% endhighlight %}
 
+To read in the data from the arduino we need the portname of it. Find the arduino in the listed devices on your terminal and save the portname into a var.
 
-Wenn wir jetzt unser script starten wird auf der Command Line die Anschlüsse angezeigt.
-Hier suchen wir den Arduino und legen eine Variable mit dem entsprechenden comNamen an:
-
-Mac & Linux zB:
+Mac & Linux:
 {% highlight javascript %}
 var portName = '/dev/cu.usbmodem1421';
 {% endhighlight %}
 
-Für Windows zB:
+Windows:
 {% highlight javascript %}
 var portName = 'COM3';
 {% endhighlight %}
 
-Anschließend verbinden wir uns mit dem Arduino
+
+### TASK 4: Connect to the Serial Port of the arduino:
+
+we create a new serialport connection by passing the `portName` to the serialport library. Additional we also pass 2 option parameters:
+
+* baudrate: defines the modulation rate (transfer rate)
+* parser: defines how we will read in the data from the arduino. In our case we define the two delimiters (\r\n):
 
 {% highlight javascript %}
-var arduinoPort = new serialport.SerialPort(portName, {
+var arduinoPort = new serialport(portName, {
     baudrate: 9600,
     parser: serialport.parsers.readline("\r\n")
 });
 {% endhighlight %}
 
-Jetzt erstellen wir Funktionen die bei den unterschiedlichen Events der serialport library aufgerufen werden:
-{% highlight javascript %}
-arduinoPort.on('open', function() {
-  //ich werde aufgerufen wenn wir uns mit dem Arduino verbinden
-});
-{% endhighlight %}
+Print out the `arduinoPort` variable in your terminal:
 
-Wir erstellen eine Funktion die beim Empfangen von neuen Daten aufgerufen wird:
+### TASK 5: Subscribe to the events of the arduino serial port
 
-{% highlight javascript %}
-arduinoPort.on('data', function(data) {
-      // i am called everytime a new line is sent from the arduino
-      // data is read as String so we parse it to get a JSON Object
-      // wrap it in try catch block in case line is parsed not correct#
-      try{
-        var obj = JSON.parse(data);
-        console.log(obj.value);
-      }catch(e){
-        console.log(e);
-      }
+The serial port module has several events we want to subscribe to. Register a callback function to following events. Look into the documentation of the library [here](https://github.com/EmergingTechnologyAdvisors/node-serialport#module_serialport--SerialPort+event_error)
 
-});
-{% endhighlight %}
+* Event: "error"
+* Event: "open"
+* Event: "data"
+* Event: "disconnect"
+* Event: "close"
 
-### Parse Error
-In der Übung ist immer wieder ein Error aufgetreten beim Einlesen der Daten. Daher muss man die Json.parse() Funktion in einen try -catch Block setzten um den Error abfangen zu können
+Print out a according message in every callback. Run the script and look into the output of your terminal
 
-## 2. Senden der Daten an eine Webanwendung
+### TASK 6: Read in the Sensor data
 
-Um die Daten nun visualisieren zu können werden diese zu einem Javascript Client übertragen
+In the callback `on('data', function(data){})` we receive the sensor values from the arduino. The data is read in as String. To access the single parameters we will parse the String into a Json object. Use the function `Json.parse()` and print out the sensor values on the terminal.   
 
-Folgende Technologien verwenden wir:
 
-* [Socket.io] bzw WebSockets zum Übertragen der Daten
-* [Express] um die Webanwendug in unserer Node.js Applikation zu hosten
-* [Smoothie.js] für eine Echtzeit-Visualiserung
-
-Zu unserem index.js file müsen wir die notwendigen Komponenten hinzufügen. Dazu installieren wir Express und Socket.io
-Dazu führen wir folgende Commands in unserem Projektverzeichnis aus:
+### TASK 7 Optional: Fix the parse errors
+To prevent an error on windows we have to wrap the `Json.parse()` function into a try catch block to catch the error
 
 {% highlight javascript %}
-npm install express --save
-npm install socket.io --save
+try{
+    var obj = JSON.parse(data);
+}catch(e){
+  console.log(e);
+}
 {% endhighlight %}  
 
-Anschließend erweitern wir unsere Node Anwendung um einen express und socket.io server:
+
+
+## 2. Send the sensor data to a website
+
+### TASK 8: Initialize socket.io
+
+We want to send the datapoints to a website. We will use socket.io for the communication. We have to adjust the initialization of express when it is used together with socket.io
 
 {% highlight javascript %}
 var express = require('express');
 var app = express();
 var http = require('http').Server(app);
 var socketio = require('socket.io')(http);
+http.listen(3000);
 {% endhighlight %}  
 
-Wie funktioniert das Laden von Modulen? Hier eine [Erklärung zu Module]
 
-Mit einer Http Get Route können wir überprüfen ob der Server richtig läuft:
-{% highlight javascript %}
+### TASK 9: Emit sensor values to socket.io clients
 
-// return a Hello World Message when the base url is requested
-app.get('/', function (req, res){
-    res.send('<h1>Hello world</h1>');
-  });
+To send the sensor values to the client we have to use the function `emit(route, data)`. we start to read in the data from the serialport when a client connects via socket.io.
 
-//start the server at port 3000
-http.listen(3000);
-{% endhighlight %}
-
-Starten wir jetzt unsere Anwendung neu und wechseln auf die [Seite] bekommt man Hello World zurück
-
-Jetzt wollen wir die entsprechenden Daten über Socket.io zum Client verschicken:  
+* register a listener on the `connection` event on the socket.io object.
+* register a listener on the serialport to receive the data from the arduino.
+* In this callback call the function `emit('route', data)` on the socketio object.
 
 {% highlight javascript %}
 socketio.on('connection', function(socket) {
@@ -181,56 +171,46 @@ socketio.on('connection', function(socket) {
 {% endhighlight %}
 
 
-## 3. Erstellen der Webanwendug
+### TASK 10: Receive the data in the browser
 
-Wir erstellen in unserem Projektordner einen Subordner mit dem Namen 'client'. In diesem legen wir ein index.html und ein client.js file an.
-Um die index.html Seite vom Node-Server abrufen zu können passen wir unsere index.js script an:
+* Switch to the sensordisplay.html file.
+* At the the end of the body import the socket.io javascript client library
+* Add the javascript code to connect to the socket.io server to receive the data points
+
 {% highlight javascript %}
-app.get('/', function (req, res){
-    res.sendFile(\__dirname + "/client/index.html");
+<script>
+  var socket = io.connect('http://localhost:3000');
+  socket.on('data', function(data) {
+    console.log(data);
   });
-
+</script>
 {% endhighlight %}
 
-Der Server muss außerdem die Files im Ordner /client verfügbar machen. So können die Scripts in dem index.html file geladen werden.
-{% highlight javascript %}
-app.use(express.static(\__dirname + "/client"));
+
+## 3. Display the data on a website
+
+To display the sensor values we will use a simple javascript library called [Smoothie.js].
+
+### TASK 11: Import the smoothie.js library:
+
+* create a folder `lib` inside the public folder
+* create a new file `smoothie.js` in this folder
+* copy the code from [here](https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js) into this file
+* in the sensordisplay.html file import this javascript file
+{% highlight html %}
+    <script src="/lib/smoothie.js" charset="utf-8"></script>
 {% endhighlight %}
 
-Jetzt können wir die Webanwendung programmieren. Dazu binden wir folgende Scripts in unser Html File ein:
+### TASK 12: Data Visualization
 
-{% highlight javascript %}
-<script src="/socket.io/socket.io.js"></script>
-<script type="text/javascript" src="/client.js"></script>
-{% endhighlight %}
+To display the data we have to create a new smoothie.js objec and asign the datapoints to it when we receive them.
 
-In unserem client.js file erstellen wir nun einen socket.io Client und eine Funktion zum Empfangen der Daten
-
-{% highlight javascript %}
-var socket = io();
-
-socket.on('data', function(msg) {
-    console.log(msg);
-});
-{% endhighlight %}
-
-In der Konsole im Browser werden jetzt die Werte vom Arduino geprintet
-
-### Echtzeit-Visualiserung mit smoothiecharts
-
-Jetzt können wir die Daten visualisieren. Hierzu verwenden wir [Smoothie.js].
-
-Dazu legen wir einen lib Folder an (/client/lib/) und kopieren den [Code für die Library] in ein neues File smoothie.js
-Anschließend binden wir noch das script in unser index.html file ein.
-
-In unserem index.html File erstellen wir nun ein neues Element auf dem die Visualisierung gezeichnet wird:
+* create a canvas element for our chart in the html file
 {% highlight html %}
     <canvas id="mycanvas" width="800" height="200"></canvas>
 {% endhighlight %}
 
-
-Im client.js File erstellen wir ein neues Smoothie.js Objekt. Mit der streamto methode setzten wir das element auf welchem  smoothie.js die Visualisierung zeichnet. Außerdem erstellen wir ein neues Objekt vom Typ TimeSeries.
-
+* create a new smoothie.js object
 {% highlight javascript %}
 var smoothie = new SmoothieChart();
 smoothie.streamTo(document.getElementById("mycanvas"));
@@ -239,20 +219,20 @@ var line1 = new TimeSeries();
 smoothie.addTimeSeries(line1);   
 {% endhighlight %}
 
-Um jetzt neue Werte zu zeichnen, müssen diese an das line1 Objekt angefügt werden. Das machen wir in dem socket.io Callback
+* to draw new elements we have to pass the sensor values to the line1 object.
+
 {% highlight javascript %}
 socket.on('data', function(msg) {
     console.log(msg);
     //we only want to visualize the raw sensor value
-    if (msg.unit == 'raw') {
-        line1.append(new Date().getTime(), msg.value);
-    }
+    line1.append(new Date().getTime(), msg);
+
 });
 {% endhighlight %}
 
 ### Danger Alert! Mein Arduino geht nicht Was jetzt???
 Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicht funktioniert gibt es die Möglichkeit Random Daten von der Node Applikation zum Client zu schicken
-Dazu erstellen folgende Funktion:
+Dazu erstelle folgende Funktion:
 
 {% highlight javascript %}
 var sensorJson = JSON.parse('{"timestamp": 19123,"type": "heart rate sensor raw","unit": "raw","value": 987}');
@@ -266,16 +246,24 @@ function sendRandomData(socket) {
 
 Diese Funktion muss man dann in dem 'connection' Callback aufrufen wenn sich der Client verbindet
 
+### Home Exercise:
 
-So wir haben jetzt die Daten eingelesen und auch zum Client geschickt und visualisiert. Für viele Anwendungen ist es jedoch auch spannend die Sensorwerte in einem File zu speichern und zu einem späteren Zeitpunkt weiterzuverarbeiten.
+Write a simple node application to store the datapoints from the arduino into a csv file.
+Use the [FileSystem] to write the datapoints into a csv file with semicolons `;`  as delimiter. The csv-file should have following structure:
 
-### Hausübung:
+|timestamp|  value  |
+|:-------:| -------:|
+| 2443164 |   15    |
+| 2443265 |   212   |
+| 2443365 |   333   |
 
-Erweitere unsere Node.js Applikation um eine Funktion zum Speichern der 'raw' Sensorwerte.
-Sobald sich der Server mit dem Arduino verbindet sollen die Werte in ein File gespeichert werden. (CSV oder JSON).
-Dazu kann das bestehende Projekt einfach umgeändert werden. Das ganze soll ohne Client  funktionieren. Die socket.io und express teile können also gelöscht werden.
+The application should start to write into the file when it receives data. It should stop when 5000 data points are in the file.
+Hand in a zipped version of your project with the form `matrikelnummer_hue1_asen2.zip`.
 
-Die [FileSystem Komponente] von Node soll dazu verwendet werden
+* create a new npm project for the exercise
+* you can copy the required parts from this lesson
+* make sure to delete the node_modules folder before you hand in your exercise
+
 
 [node-serialport]: https://github.com/voodootikigod/node-serialport/
 [Smoothie.js]: http://smoothiecharts.org/
@@ -285,4 +273,4 @@ Die [FileSystem Komponente] von Node soll dazu verwendet werden
 [Websocket Anwendung]: http://www.websocket.org/echo.html
 [Erklärung zu Module]: http://openmymind.net/2012/2/3/Node-Require-and-Exports/
 [Code für die Library]:  https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js
-[FileSystem Komponente]: https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback
+[FileSystem]: https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback

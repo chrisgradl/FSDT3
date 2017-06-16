@@ -105,6 +105,7 @@ We have created the basic skeleton for our web app with express.
 Socket.IO enables real-time bidirectional event-based communication. It consists in
 - a Node.js server
 - a Javascript client library for the browser (or a Node.js client)
+
 Socket.io uses several technologies to create this real-time connection depending which are available for the clients. For example:
 - WebSocket
 - Flash Socket
@@ -153,18 +154,8 @@ We test our our socket.io server with a simple javascript client on our app.html
   });
 </script>
 {% endhighlight %}
-
-
-
-
-
-
-
-
-
-
-
-
+- Open the website in your browser
+- control the output on the command line and in your browser.
 
 
 <!--
