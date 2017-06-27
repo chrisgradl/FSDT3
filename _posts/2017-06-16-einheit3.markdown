@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Lesson 3: Arduino -> Node"
-date:   2017-06-16 08:00:00
+date:   2017-06-15 08:00:00
 categories: main
 ---
 
@@ -263,6 +263,9 @@ Hand in a zipped version of your project with the form `matrikelnummer_hue1_asen
 * create a new npm project for the exercise
 * you can copy the required parts from this lesson
 * make sure to delete the node_modules folder before you hand in your exercise
+* the comments below should help you:
+
+<script src="https://gist.github.com/chrisgradl/69a892b5c87b40a6de0b9bdeee419b2c.js"></script>
 
 
 [node-serialport]: https://github.com/voodootikigod/node-serialport/
