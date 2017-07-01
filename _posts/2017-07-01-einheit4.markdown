@@ -1,54 +1,19 @@
 ---
 layout: default
-title:  "Lesson 4: Visualization of Sensor Data in the Browser"
-date:   2017-07-01 08:00:00
+title:  "Lesson 4: Visualization of CSV Files"
+date:   2017-07-01 00:00:00
 categories: main
 ---
 
-## Inhalt dieser Übung:
+# Visualization of CSV Files
+In the last session we visualized the datasets with smoothie.js. In your homework you should have created a csv file with datapoints of your arduino. Today we will load this datasets and visualize them in the browser:
 
-- Organisation
-- Wiederholung und Theorie zu Übung1
-- Hausübung besprechen
-- Visualisierung mit Plottable.js
-- Anwendungen im Gesundheitsbereich
+![Visualization]({{ site.url }}/fsdt3/img/screenshot.png)
 
-## 1. Wiederholung von Übung 1
-
-Aufbau der Applikation:
-
-![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
-
-### Was ist Node.js?
-
-- Javascript Seitiger Webserver
-- im Vergleich zu vielen anderen Sprachen: Event Based und Single Threaded  <https://www.codeschool.com/blog/2014/10/30/understanding-node-js/>
-- based on V8 = Javascript Enginge entwickelt von Google (Chrome Browser)
-- Mittlerweile auch für Desktopanwendungen: Atom.js, Slack Client oder auch Iot Geräte
-
-Wer verwendet Node.js:
-
-- Netflix: <http://thenewstack.io/netflix-uses-node-js-power-user-interface/>
-- Uber: <https://nodejs.org/static/documents/casestudies/Nodejs-at-Uber.pdf>
-
-## 2. Data Visualization
-
-Grundsätzlich können wir unterscheiden beim Visualisieren zwischen:
-
-- Echtzeitdaten: Min und Max Werte können sich ändern. Datensatz wird laufend aktualisiert, es werden nur die letzten X Werte verwendet: wie bei Smoothie.js
-- Statische Datensätze: Datensatz ändern sich nicht mehr. Eine bestimmte Anzahl von Datenpunkten wird visualisiert.
-
-In der letzten Übung haben wir bereits die Werte vom Arduino visualisiert. Dabei haben wir smoothie.js die Werte übergeben und die Visualisierung dann upgedated.
-Smoothie.js ist eine sehr einfache Library mit Fokus auf Echtzeitvisualisierungen. Umfangreichere Möglichkeiten zum Visualsieren mit Javascript:
 
 ## d3.js:
-[d3js] ist die am meisten verwendete Library für Visualisierungen im Web. Sehr mächtig aber zu beginn auch komplexe Funktionalität. Sehr individuelle und interaktive Visualisierungen sind möglich.
+[d3js] is a very powerful and popular visualization library for the browser. Unfortunately it is also very complicated in the beginning. in this lesson we will use [plottablejs] a simple Visualization library which is based on d3 but makes it more easy to draw simple charts.
 
-Wir verwenden zum Visualisieren [plottablejs] eine Vis Library die auf D3.js basiert und einfacher zum Verwenden ist.
-
-### SVG:
-Zur Visualisierung auf Webseiten hat sich in den letzten Jahren eine neue Technologie entwickelt, die auf HTML 5 aufsetzt: SVG – Scalable Vector Graphics. SVG ist die vom World Wide Web Consortium (W3C) empfohlene Spezifikation zur Beschreibung 2-dimensionaler Vektorgrafiken. SVG basiert auf XML und die gebräuchlichsten Web-Browser können den Großteil des Sprachumfangs darstellen.
-SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man einen SVG Tag, innerhalb dessen dann die Grafiken eingebettet werden
 
 {% highlight html %}
 <svg width="400" height="400">
@@ -57,46 +22,30 @@ SVG kann direkt in einem HTML-File eingegeben werden. Dafür definiert man eine
 {% endhighlight %}
 
 
-## Welche Visualisierung macht Sinn für unseren Datensatz?
-
-{% highlight json %}
-
-[{timestamp: 387709, type: "heart rate sensor raw", unit: "raw", value: 500},
-{timestamp: 387710, type: "heart rate sensor bpm", unit: "bpm", value: 35},
-{timestamp: 387720, type: "heart rate sensor raw", unit: "raw", value: 494},
-{timestamp: 387721, type: "heart rate sensor bpm", unit: "bpm", value: 35},
-{timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}]
-{% endhighlight %}
-
-- Zeitverlauf am besten mit Linegraph so ist die Änderung klar sichtbar
-
-- Nächstes Semester LV zu Visualisierung!!!
-
-## Konzepte von Plottable.js:
+## Drawing Charts with plottable.js
 
 ### Componentes:
 
-Jede plottablejs Vis besteht aus Komponenten und wird in einer Tablestrutkur(Coloumn & Rows) gezeichnet:
+Every plottablejs visualization consists of so called components.
+Components are the modular building blocks of charts in Plottable. A Component is an object that requires visual space and can be placed on a table. Components can be overlaid on top of each other and form a Group, which is in itself a component. The components are drawn in a table structure (column & rows)
 
-Komponenten sind:
+componentes are e.g.
 
-- Achsen
-- Legenden
+- Axes
+- Legends
 - Plots
 - Labels
 
-Eine Sammlung von Komponenten findet ihr hier:<http://plottablejs.org/components/>
-Wird eine Visualisierung programmiert legt man die notwendigen Komponenten an. Ein Linegraph würde aus folgenden Parts bestehen:
+A simple linegraph would have following components:
 
-- ein Line Plot
-- 2 Achsen mit Beschriftung
+- a line plot
+- 2 axes
 
 ### Scales:
-Scales ermöglichen die Datenwerte  auf eine einheitliche Größe zu bringen. So müssen ja der Lineplot und die Achse beide die selbe Werteskalierung haben.
+Scales can be thought of as functions (in the mathematical sense) that map values from a domain to a range. They essentially function as bridges between Components. For example, if both a Plot and an Axis are driven by the same Scale, then changes to the Plot, such as zooming in and out to change the domain of the data, will be reflected in the Axis.
 
 ### Table Layout:
-
-Die Positionen wo die einzelnen Komponenten dann gezeichnet werden sollen: Für einen Linegraph:  
+At the core of any Plottable-based chart is a table-based layout engine. Think of Plottable as a table within an svg element, where each cell in the Table can draw a Component. Take the following example:
 
 {% highlight javascript %}
 [
@@ -105,30 +54,25 @@ Die Positionen wo die einzelnen Komponenten dann gezeichnet werden sollen: Für 
 ]
 {% endhighlight %}
 
-### Interaktionen
+## Drawing a simple chart with plottablejs
 
-plottablejs hat einige Methoden mit der eine Visualisierung um interaktive Funktionalitäten erweitert werden kann.
+### create a simple file server with node.js
 
-- Zoom: Mit Scrollen kann in bestimmte bereiche gezoomt werden
-- onClick / onHover: damit kann der Datenpunkt ermittelt werden wo der Mauszeiger gerade ist
-
-## Einfaches Beispiel zu plottable.js:
-
-Schritte:
-
-- Wie in Übung 1 legen wir über npm ein neues Node.js Projekt an in dem neuen Ordner teil2. Außerdem installieren wir express.js über den npm package manager
-- Erstelle einen Unterordner /client und in diesem dann die Files index.html und client.js
-- Erstelle das index.js File für den Node.js Server
-- Auf der Serverseite benötigen wir nur eine express Route für das html File und starten den Server auf Port 3000.
+- we create a new npm project with the name `simplechart` in a dedicated folder
+- create a subfolder `public`
+- in the `public` folder create a index.html file and a client.js file
+- in the base folder `simplechart` create a `index.js` file
+- we will use the express module to route and serve the neccessary files
+- install express with `npm install express --save`
+- in our `index.js` script we start a simple web server and make our files in the folder `public` available
 
 {% highlight javascript %}
 var express = require('express');
 var app = express();
-
-app.use( express.static(\__dirname));
+app.use( express.static(\__dirname + "/public"));
 
 app.get("/", function (req, res) {
-    res.sendFile(\__dirname +"/client/index.html");
+    res.sendFile(\__dirname +"/public/index.html");
 });
 
 app.listen(3000, function () {
@@ -136,23 +80,26 @@ app.listen(3000, function () {
 });
 {% endhighlight %}
 
-- erstellen wir nun ein valides html File in unserem index.html und laden die notwendigen Libraries
-{% highlight html %}
+### load the required resources
 
+- in our index.html file we put the required tags to create a valid html file. You can copy it from [here](https://www.w3schools.com/html/html_intro.asp)
+- we have to load the plottable.js and d3.js library in our header
+{% highlight html %}
 <script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
 <script src="https://cdnjs.cloudflare.com/ajax/libs/plottable.js/2.2.0/plottable.min.js" charset="utf-8"></script>
-<script src="client/client.js" charset="utf-8"></script>
-
 {% endhighlight %}
-
-Im Header müssen wir noch ein plottablejs spezifisches CSS File anlegen
-
+- we also have to load a specific css file for plottable.js
 {% highlight html %}
 <link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/plottable.js/2.2.0/plottable.css">
 {% endhighlight %}
+- in the end of the body we load the client.js file:
+{% highlight javascript %}
+<script src="public/js/client.js" charset="utf-8"></script>
+{% endhighlight %}
 
+### drawing sample data
 
-Zu Beginn wollen wir einen einfachen Lineplot machen mit einem statischen Datenset:
+we want to draw following simple data set on a line chart. We have 4 data points. Each with a x and y value:
 
 {% highlight javascript %}
 var data = [
@@ -163,15 +110,16 @@ var data = [
 ];
 {% endhighlight %}
 
-Dazu brauchen wir 3 Komponenten: 2 Achsen und den Lineplot.
-Um die Werte sowohl auf den Achsen als auch auf den Plot richtig zu skalieren benötigen wir 2 Skalierungs-Objekte
+a Scale takes data values (which determine the domain) and maps them to pixel values (the range). This is important because certain objects, such as axes and plots, need to be drawn to the same scale in order for the chart to have meaning.
 
 {% highlight javascript %}
 var xScale = new Plottable.Scales.Linear();
 var yScale = new Plottable.Scales.Linear();
 {% endhighlight %}
 
-Anschließen erstellen wir die 3 Komponenten 2 Achsen und den Lineplot :
+To specify a Scale in this example, we create two linear scales, named xScale and yScale respectively. The Scales.Linear class defines a scale that forms a linear mapping between an input domain and an output range.
+
+Once we've specified the scale, we need to set the locations of our Axes. We create two axes, named xAxis and yAxis. The Axes.Numeric class defines an axis that displays numeric data. Its constructor requires a Scale and a string that denotes the orientation for the axis. Valid orientations include "top", "bottom", "left", and "right".
 
 {% highlight javascript %}
 var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
@@ -179,19 +127,23 @@ var yAxis = new Plottable.Axes.Numeric(yScale, "left");
 var plot = new Plottable.Plots.Line();
 {% endhighlight %}
 
-Um jetzt den Graph richtig zu zeichnen müssen wir angeben wie unser plot Objekt mit den Datenpunkten umgehen soll. Hierzu übergeben wir jeweils eine Funktion für den x und den y Wert.
+Now we need to create the plot. In this case, we want a line chart, so we use the Plots.Line class.
 
 {% highlight javascript %}
-// example data point: { "x": 0, "y": 1 }
+var plot = new Plottable.Plots.Line();
+{% endhighlight %}
 
-// for each entry in our array return for the x coordinate the x value of the datapoint
+
+Plottable charts have a concept of Accessors, which are functions for accessing specific datum properties. An Accessor function typically has three parameters: datum (the particular entry that is being accessed), index (the entry's index in its dataset), and dataset (the dataset that the datum belongs to).
+
+Line plots require two basic accessors to be defined for x and y coordinates, as well as the scales that the Accessors should correspond to.
+
+{% highlight javascript %}
 plot.x(function(d) { return d.x; }, xScale);
-
-// same with y
 plot.y(function(d) { return d.y; }, yScale);
 {% endhighlight %}
 
-Als nächstes müssen wir aus unserem Datenarray eine plottable.js Datatset erstellen und dieses unserem plot Objekt übergeben
+Raw data must be converted to a Dataset object before it can be used with plots.
 
 {% highlight javascript %}
 
@@ -201,103 +153,107 @@ plot.addDataset(dataset);
 
 {% endhighlight %}
 
-Anschließend müssen wir bevor wir die Visualisierung zeichen können noch angeben wie die Komponenten in unserem Table angeordnet sind. Hierzu erstellen wir das Table Objekt chart:
+Now we can add our dataset directly to the plot.
+
+{% highlight javascript %}
+
+plot.addDataset(dataset);
+{% endhighlight %}
+
+Now we need to put all the pieces together to create a chart. To do this, we will create a Table. We want to create a basic chart with a y-axis on the left side, an x-axis on the bottom, and a plot within the boundaries established by the axes. With this in mind, we define our Table as follows.
 {% highlight javascript %}
 var chart = new Plottable.Components.Table([
   [yAxis, plot],
   [null, xAxis]
 ]);
 
-//render to specific svg
-chart.renderTo("svg#tutorial-result");
-
 {% endhighlight %}
 
+To draw the plot on the html file we use the `renderTo()` function
+{% highlight javascript %}
+chart.renderTo("svg#tutorial-result");
+{% endhighlight %}
 
-in unserem HTML File müssen wir nun ein entsprechendes SVG Element mit der richtigen Id anlegen:
+in the html file we have to create the svg element with the correct id:
 {% highlight javascript %}
     svg id="tutorial-result" height="400"></svg>
 {% endhighlight %}
 
+### add labels to the example:
 
-### Welche Möglichkeit Daten zu Laden in plottablejs / d3.js?
-
-- Datensätze aus Files laden mit den Funktionen:
-
+- try now to add a x-Label and y-Label to the chart.
+- Where do you have to put it in the table?
 {% highlight javascript %}
-  d3.json();
-
-  d3.csv();
+var xLabel = new Plottable.Components.AxisLabel("x axis");
 {% endhighlight %}
 
-- Die Daten vorher mit eigener Funktion laden (http) und dann in ein Dataset verwandeln
 
 
-## Visualisierung eines CTGs:
+### Load data from a file
 
-Da ein Teil der Abgabe die Visualisierung eines Datensatzes vom Arduino ist werden wir stattdessen  einen CTG Datensatz visualisieren:
-
-Der Datensatz besteht aus:
-
-- Herztöne des Babys (FHR = fetal Heart Rate)
-- Wehen (UC = Uterus Contraction)
-
-Viele unterschiedliche gesundheitsbezogene Datensätze stehen unter <http://physionet.org/> bereit
-
-Auf der Seite <http://physionet.org/cgi-bin/atm/ATM> kann man die Daten als CSV downloaden:
-
-- Wähle die Database: CTU-CHB Intrapartum Cardiotocography Database
-- Wähle anschließend eine beliebige Aufzeichnung aus
-- Wir wollen die gesamte Aufzeichnung visualisieren (to end)
-- Time Format: seconds
-- In der Toolbox rechts wird Export Signal als CSV ausgewählt
-- Anschließend kopieren wir die Daten in ein neues File ctg.csv
-- Anschließend erstellen wir ein neues Script clientctg.js und laden es in unserem HTMl File anstelle von client.js
-- in dem Datensatz ersetzten wir die ersten beiden Zeilen mit:
+In the previous example we have visualized predefined datapoints stored in a variable. But how can we import data from a file? The `d3.csv()` function allows us to load a file and process the data points.
 
 {% highlight javascript %}
-seconds,bpm,nd
-....
-....
-....
-....  
-{% endhighlight %}
+d3.csv("/path/to/file", function(error, d) {
 
-So kann dann der Datensatz einfacher geladen werden
-
-Im Vergleich zum ersten Beispiel müssen wir nun die Daten aus einem CSV File laden:
-
-Das kann man über die Funktion d3.csv machen: Hier gitb man als Paramter eine Funktion zurück mit 2 Paremetern. e  falls ein Fehlerbeim Laden passiert und d für den Datensatz  
-
-{% highlight javascript %}
-d3.csv("/client/data/ctg.csv", function(e, d) {
-
-  if (e) {
+  if (error) {
       console.log(error);
       throw error;
   }
   console.log(d);
-  var dataset = new Plottable.Dataset(d);
-  plot.addDataset(dataset);
+  var csvdata = new Plottable.Dataset(d);
+  plot.addDataset(csvdata);
 });
 {% endhighlight %}
 
-Versuche nun selbständig die Daten UC oder FHR zu visualisieren. Gib acht welche Werte du in den Funktionen der Plotvariable für x und y zurückgibst!
+- create a file `testdata.csv`in the public folder and copy this content into it:
+{% highlight javascript %}
+x, y
+0, 3
+1, 2
+2, 8
+3, 19
+4, -4
+{% endhighlight %}
+- load this file with the `d3.csv()` function
+- visualize the csv data instead of the `data` variable
 
-### Möglichkeit zum Speichern und Abrufen von Sensordaten
 
-- Speichern in Files mit passenden Format: z.B.: json oder csv
-- Via APIs
-- Speichern  und Abfragen in Datenbanken. Spezielle Datenbanken für zeitbasierte Daten.
+## Visualizing a CTG csv file
 
-Beispiele:
+Our file contains following data points
 
-- physionet.org <http://physionet.org/>
-- Google Fit <https://developers.google.com/fit/>
-- Apple Healthkit <https://developer.apple.com/healthkit/>
-- openmhealth <http://www.openmhealth.org/>
-- influxdb <https://influxdata.com/>
+- seconds: elapsed seconds starting with 0
+- FHR = fetal Heart Rate
+- UC = Uterus Contraction
 
+### Download the dataset
+
+The datasets can be downloaded on following website
+<http://physionet.org/cgi-bin/atm/ATM>
+
+- Choose following database: CTU-CHB Intrapartum Cardiotocography Database
+- Choose one recording
+- Select `to end`  
+- Time Format: seconds
+- In the toolbox select `Export Signal als CSV`
+![Visualization]({{ site.url }}/fsdt3/img/physionetscreenshot.png)
+- download the created `samples.csv`
+- copy the file into the `public` folder
+- delete the first line in the file
+- remove the quotation marks from the second line
+
+{% highlight javascript %}
+seconds, bpm, nd
+0.000,158.000,2.000
+0.250,158.000,2.000
+0.500,158.000,2.000
+0.750,158.000,2.000
+....  
+{% endhighlight %}
+
+- visualize the bpm or nd values
+- tip: make the appropriate adjustments in the Accessors functions: our datapoints are no longer x and y but seconds, bpm and nd
 
 
 [d3js]: https://d3js.org/

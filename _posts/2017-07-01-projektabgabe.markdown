@@ -1,20 +1,30 @@
 ---
 layout: default
 title:  "Information regarding exercise and exam"
-date:   2017-04-28 08:00:00
+date:   2017-07-01 02:00:00
 categories: main
 ---
 
-TBA
+Abgabe
 
-<!--# Abgabe
+Die Abgabe besteht aus 2 Teilen:
 
-- Visualisiere einen mit dem Arduino aufgezeichneten Datensatz mit plottable.js in einem Linegraph. Verwende dazu die Funktion d3.json oder d3.csv. Baue außerdem eine Interaktion ein ( zb: Zoom oder Datenpunkt auswählen)
-- Erweitere die Anwendung aus teil1: Anstatt mit smoothie.js soll die client Visualisierung mit plottable.js erfolgen: Dabei soll die Visualisierung in einem gewissen Interval upgedated werden (z.b.: jede Sekunde).
-- Die Abgabe erfolgt als zip file. Name der Datei ist matrikelnummer.zip
+### 1
+- Visualisiere einen mit dem Arduino aufgezeichneten Datensatz mit plottable.js in einem Linegraph. Verwende dazu die Funktion  d3.csv. Baue außerdem eine Interaktion ein ( zb: Zoom oder Datenpunkt auswählen)
+
+### 2
+
+- Erweitere die Arduino Anwendung: Anstatt mit smoothie.js soll die client Visualisierung mit plottable.js erfolgen: Dabei soll die Visualisierung in einem gewissen Interval upgedated werden wenn 100 neue Datenpunkte vom Arduino empfangen wurden
 - Code soll ausreichend kommentiert und nachvollziehbar sein
-- Die Abgabe erfolgt am ecampus bis zum 30.Juni
-- Da die Zeit zwischen letzter Übung und Prüfung relative kurz ist muss das Beispiel nur abgegeben und ausreichend dokumentiert werden. Daher ist bis Semesterende Zeit für die Abgabe  
+
+### Abgabe:
+
+- Die Abgabe erfolgt am ecampus bis zum Prüfungstermin
+- Abgabe als zip File mit folgender Struktur:
+
+matrikelnummer.zip
+  - ue1
+  - ue2
 
 ## Tipp für die Echtzeit-Visualiserung
 
@@ -22,37 +32,10 @@ TBA
 
 {% highlight javascript %}
 
-//init the Visualization do it only one time
+//init the Visualization do it only one time and add the
 var dataset = new Plottable.Dataset(dataarray);
 plot.addDataset(dataset);
-
 
 //call this function everytime the dataarray changes
 dataset.data(dataarray);
 {% endhighlight %}
-
-# Prüfung
-
-Für die Prüfung sollen die Beispiele aus dem Unterricht und der 1.Hausübung verstanden und erklärt werden können. Außerdem sollen die grundlegenden Konzepte der verwendeten Technologien erklärt werden können
-
-### Was ist Node.js?
-
-### Was ist NPM?
-
-### Was ist express.js und wofür haben wir es verwendet?
-
-### Für welche Funktion haben wir Socket.io verwendet und was macht es?
-
-### Wie ist unsere Client / Server Anwendung aufgebaut?
-
-### Wie haben wir die Daten vom Arduino ausgelesen?
-
-### Wir haben ein paar Mal Callbacks / Events verwendet wobei?
-
-### Wie können Daten in plottablejs geladen werden?
-
-### Welche Komponenten für plottablejs kennst du?
-
-### Was ist SVG?
-
-*/ -->
