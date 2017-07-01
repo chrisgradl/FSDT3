@@ -22,9 +22,13 @@ Die Abgabe besteht aus 2 Teilen:
 - Die Abgabe erfolgt am ecampus bis zum Prüfungstermin
 - Abgabe als zip File mit folgender Struktur:
 
-matrikelnummer.zip
-  - ue1
-  - ue2
+asen2_matrikelnummer.zip
+  darin 2 ordner
+  ue1
+  ue2
+
+für jede Übung soll ein npm projekt angelegt werden
+der node_module ordner soll gelöscht werden
 
 ## Tipp für die Echtzeit-Visualiserung
 
