@@ -94,7 +94,7 @@ app.listen(3000, function () {
 {% endhighlight %}
 - in the end of the body we load the client.js file:
 {% highlight javascript %}
-<script src="public/js/client.js" charset="utf-8"></script>
+<script src="client.js" charset="utf-8"></script>
 {% endhighlight %}
 
 ### drawing sample data
