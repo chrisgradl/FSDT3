@@ -60,7 +60,7 @@ At the core of any Plottable-based chart is a table-based layout engine. Think o
 
 - we create a new npm project with the name `simplechart` in a dedicated folder
 - create a subfolder `public`
-- in the `public` folder create a index.html file and a client.js file
+- in the `public` folder create a `index.html` file and a `client.js` file
 - in the base folder `simplechart` create a `index.js` file
 - we will use the express module to route and serve the neccessary files
 - install express with `npm install express --save`
@@ -208,12 +208,12 @@ d3.csv("/path/to/file", function(error, d) {
 
 - create a file `testdata.csv`in the public folder and copy this content into it:
 {% highlight javascript %}
-x, y
-0, 3
-1, 2
-2, 8
-3, 19
-4, -4
+x,y
+0,3
+1,2
+2,8
+3,19
+4,-4
 {% endhighlight %}
 - load this file with the `d3.csv()` function
 - visualize the csv data instead of the `data` variable
