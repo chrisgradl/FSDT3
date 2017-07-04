@@ -1,5 +1,4 @@
 # ASEN2
-Übung1 von ASEN2
 
 **Teil1:**
 - Downloade das Projekt
