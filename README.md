@@ -1,5 +1,5 @@
-# FSDT3
-Übung1 von FSDT3
+# ASEN2
+Übung1 von ASEN2
 
 **Teil1:**
 - Downloade das Projekt
@@ -7,10 +7,6 @@
 - installiere die notwendigen Libraries mit
 ```
 npm install
-```
-- Anschließend installiere noch die Library serialport mit dem Command:
-```
-npm install serialport --save
 ```
 
 - Zuletzt starte die Applikation mit:
