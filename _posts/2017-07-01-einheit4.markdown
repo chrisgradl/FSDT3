@@ -14,14 +14,6 @@ In the last session we visualized the datasets with smoothie.js. In your homewor
 ## d3.js:
 [d3js] is a very powerful and popular visualization library for the browser. Unfortunately it is also very complicated in the beginning. in this lesson we will use [plottablejs] a simple Visualization library which is based on d3 but makes it more easy to draw simple charts.
 
-
-{% highlight html %}
-<svg width="400" height="400">
-<circle cx="150" cy="70" r="50" style="fill: #C61C6f"/>
-</svg>
-{% endhighlight %}
-
-
 ## Drawing Charts with plottable.js
 
 ### Componentes:
@@ -66,19 +58,7 @@ At the core of any Plottable-based chart is a table-based layout engine. Think o
 - install express with `npm install express --save`
 - in our `index.js` script we start a simple web server and make our files in the folder `public` available
 
-{% highlight javascript %}
-var express = require('express');
-var app = express();
-app.use( express.static(\__dirname + "/public"));
-
-app.get("/", function (req, res) {
-    res.sendFile(\__dirname +"/public/index.html");
-});
-
-app.listen(3000, function () {
-  console.log('Example app listening on port 3000!');
-});
-{% endhighlight %}
+<script src="https://gist.github.com/chrisgradl/acc2a5c9f8f327060407ed0ae6c54518.js"></script>
 
 ### load the required resources
 
@@ -176,7 +156,7 @@ chart.renderTo("svg#tutorial-result");
 
 in the html file we have to create the svg element with the correct id:
 {% highlight javascript %}
-    svg id="tutorial-result" height="400"></svg>
+    <svg id="tutorial-result" height="400"></svg>
 {% endhighlight %}
 
 ### add labels to the example:
@@ -186,7 +166,6 @@ in the html file we have to create the svg element with the correct id:
 {% highlight javascript %}
 var xLabel = new Plottable.Components.AxisLabel("x axis");
 {% endhighlight %}
-
 
 
 ### Load data from a file
