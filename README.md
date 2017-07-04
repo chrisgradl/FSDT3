@@ -3,7 +3,7 @@
 
 **Teil1:**
 - Downloade das Projekt
-- wechsle auf der Command line in das Verzeichnis /teil1
+- wechsle auf der Command line in das Verzeichnis /part1
 - installiere die notwendigen Libraries mit
 ```
 npm install
