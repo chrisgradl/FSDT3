@@ -1,8 +1,8 @@
 ---
 layout: default
 title: Online Session 2
-date: 2017-05-24 00:00:00
-categories: 'main, online'
+date: 2018-06-28 00:00:00
+categories: 'main'
 ---
 
 # Online Session 2: Build webapps with Node.js
@@ -28,7 +28,6 @@ For our Arduino project we will use:
 - Find out the version which is installed of npm
 - Create a new directory called `asen2_task_5`
 - Switch into the dir on the command line and run `npm install express`
-
 - What happened inside the asens2_task_5 folder?
 
 ### Local or Global installation

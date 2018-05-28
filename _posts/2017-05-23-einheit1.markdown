@@ -1,65 +1,13 @@
 ---
 layout: default
 title: Online Session 1
-date: 2017-05-23T08:00:00.000Z
-categories: 'main, online'
+date: 2018-05-28 09:00:00
+categories: 'main'
 ---
 
 # Online Session 1: Server Side Javascript with Node.js
 
-In this online session you will learn Node.js basics which is mandatory for the forthcoming exercises. We will use Node because you are already familiar with Javascript.
-
-## What is Node.js?
-
-Node is defined as asynchronous event driven JavaScript runtime for network applications. It is built on top of Google Chrome V8\. It is the open source Java Script engine developed by Google. So when you run Javascript Code in Chrome Browser it is executed by V8\. Node is using V8 also to execute and run Javascript. Node is primarily used in server applications to serve webapps and websites. It is used i.e. by Netflix, Uber and other big Internet companies. So usually a Node application is hosted on a server. However in our case we will use Node to build a client application which runs on our local machine.
-
-In the following lessons we will learn some Core concepts of Node:
-
-## Command Line and Terminal
-
-Node is started and stopped with the command line. For this course you need some commands and have a basic understanding how to use it. These commands are:
-
-- UNIX / WINDOWS : the left commands is for Linux and macOS the right one is for Windows
-- ls / dir to list directories
-- mkdir create a directory
-- cd switch to directory
-- pwd / cd shows the current location
-- node: a command to start and stop node application
-
-In the command line you can move between folders similar to a file explorer. Depending on the location you have access to the files on this path. you can go to the previous Folder with 'cd ..'
-
-### TASK 0: Learning Command Line
-
-- Open the Command Line and check in which location you are
-- create a new dir with the name `asen2_task_0` at your Desktop (with the Command Line!!!)
-- switch into this directory with your command line
-- run following command `node --version` and send me a message with the output
-
-## Check if Node.js is already installed
-
-When you run the Installer Node is installed and also added to your path. This allows us to run Node on the Command Line. Node has no Interface/UI where you can start or stop or load a Node script. Instead you have to write Commands on the Command Line to run Node. Therefore we have to check if Node is installed and accessible on your Command Line.
-
-{% highlight javascript %} node --version {% endhighlight %}
-
-Together with Node also the npm package manager is installed which we will also use.
-
-check if npm is already installed {% highlight javascript %} npm --version {% endhighlight %}
-
-### Install Node.js
-
-Go to the [node website](https://nodejs.org/en/download/) and download and install Node.
-
-## Node and the Command Line
-
-node can be controlled via the command line. To start a node application run following command:
-
-{% highlight javascript %} node /path/to/file.js {% endhighlight %}
-
-For example
-
-{% highlight javascript %} cd /path/to/application node index.js {% endhighlight %}
-
-Your Node code will be executed. This can be a simple "Hello World" output to the console or starting a http server. If you start a long running or endless process you can stop the Node application by hitting `ctrl + c`.
+## Repetition node.js
 
 ### TASK 1: Hello World in Node.js
 
@@ -86,7 +34,7 @@ http.createServer(function(request, response){
 
 Start your Node application and open the url: <http://localhost:8080> You should see the Hello World String returned in your Browser.
 
-Compared to the first Hello World this program does not end. Since we started a http server the program keeps running. To stop a running node application hit `ctrl + c` in your Command Line.
+Why does this program not finish?
 
 ## Node is using Modules to load additional components
 
@@ -96,8 +44,6 @@ We already used one module from node.js: the http module. Modules are additional
 var varWhereModuleIsSaved = require('module name as string');
 {% endhighlight %}
 
-In our Arduino project we will use some 3rd party modules. We will learn how to load modules in the next session.
-
 ## Node.js is Event Based
 
 Node is Event Based. This means that you can subscribe to certain events and call a function when the event is fired:
@@ -106,7 +52,7 @@ Node is Event Based. This means that you can subscribe to certain events and cal
 object.on('eventAsString', anonfunc);
 {% endhighlight %}
 
-We have an object where we want to subscribe to a function. We call the function and have two parameters: A String which tells the object which event we want to subscribe and the function which is called when the action happens. Based on the implementation this function can have several paramters.
+We have an object where we want to subscribe to a function. We call the function and have two parameters: A String which tells the object which event we want to subscribe and the function which is called when the action happens. Based on the implementation this function can have several parameters.
 
 We want to rewrite our hello world application to use events
 
@@ -119,7 +65,8 @@ var http = require('http');
 var server = http.createServer();
 
 server.on('request', function(req, resp) {
-   console.log("Event: Request was triggered and this function was called"); resp.end("Hello World"); });
+   console.log("Event: Request was triggered and this function was called"); resp.end("Hello World");
+});
 
 server.listen(8080, function(){
   console.log("Event: Listen was triggered");
@@ -129,12 +76,9 @@ console.log("Server running on port 8080");
 
 {% endhighlight %}
 
-- log an additional evvent when a connection is established. The event is subscribed by `connection`. The Callback function has no arguments.
+- log an additional event when a connection is established. The event is subscribed by `connection`. The Callback function has no arguments.
 - Start the server and open the website. In which order do the events get fired?
 
-## Node.js is using the Event Emitter for events
-
-Much of the Node.js core API is built around an idiomatic asynchronous event-driven architecture in which certain kinds of objects (called "emitters") periodically emit named events that cause Function objects ("listeners") to be called. In our example above the http object emits an event each time a peer connects to it. We will use other objects with this functionality in the next lessons. All objects that emit events are instances of the EventEmitter class. These objects expose an eventEmitter.on() function that allows one or more functions to be attached to named events emitted by the object. Typically, event names are camel-cased strings but any valid JavaScript property key can be used.
 
 ## Node is asynchronous and Non Blocking:
 
@@ -162,3 +106,144 @@ console.log("Data was loaded in Sync");
 [link](https://nodejs.org/dist/latest-v6.x/docs/api/fs.html#fs_fs_readfile_file_options_callback/) how to load a file asynchronous
 - print out the data from the text file in the callback function
 - Compare the two versions and the order of the log.
+
+## Repetition npm
+
+### TASK 5:
+- create a new project with npm
+- Create a new directory called `asen2_task_5`
+- Switch into the dir on the command line and run `npm install express`
+- What happened inside the asens2_task_5 folder?
+
+### Local or Global installation
+
+There are two ways to install npm packages: locally or globally. You choose which kind of installation to use based on how you want to use the package. In the previous task we installed the express module locally. So npm created the folder node_modules with the required express js code. This would allow us to use the express module in our node application.
+
+If you want to depend on the package from your own module using something like Node.js require, then you want to install locally, which is npm install's default behavior. On the other hand, if you want to use it as a command line tool, something like a utility tool then you want to install it globally.
+
+## Globally
+
+We install a module globally. By adding the `-g` flag to the command we tell npm to install it globally. This means the installed library is accessible from the command line like npm or node
+
+### TASK 6:
+
+- run the command `npm install -g bebusy`
+- then start the tool by running `bebusy` on the command line
+
+## Repetition Express
+
+For our Arduino project we will use the express module. Express is a minimal and flexible Node.js web application framework that provides a robust set of features for web and mobile applications. We will use express mainly for serving static files for our web app. It is similar to the http module.
+
+Routing refers to determining how an application responds to a client request to a particular endpoint, which is a URI (or path) and a specific HTTP request method (GET, POST, and so on).
+A route has following structure in express
+
+>`app.METHOD(PATH, HANDLER)`
+
+where:
+
+- app is an instance of express.
+- METHOD is an HTTP request method, in lowercase.
+- PATH is a path on the server.
+- HANDLER is the function executed when the route is matched.
+
+### TASK 8: Hello World with Express and static file
+
+- create a new dir called `asen_task_8`
+- switch to the command line and run `npm init`
+- install express as local dependency
+- create a index.js file
+- create a folder public
+- create the file app.html in the public folder with hello world as h1 tag and valid html tags
+- open the index.js file and add following code
+
+<script src="https://gist.github.com/chrisgradl/1f6bd821a711ec80a46f1802e318f14e.js">
+</script>
+
+- add a image of a cat to your public folder
+- create an additional route with the url /cat which returns the image
+- create the dir js in the public folder
+- add a client.js file into this folder
+- write something to the console in this javascript file
+- load the script into your index.html file and check if the output is visible on the console in the browser
+
+We have created the basic skeleton for our web app with express.
+
+## Repetition Socket.io
+Socket.IO enables real-time bidirectional event-based communication. It consists in
+
+- a Node.js server
+- a Javascript client library for the browser (or a Node.js client)
+
+Socket.io uses several technologies to create this real-time connection depending which are available for the clients. For example:
+
+- WebSocket
+- Flash Socket
+- AJAX long-polling
+
+Compared to a http request where a client requests data from a server, the socket.io connection also allows to send data from the server to the client.
+We will use socket.io to send sensor values from our node application to a website to visualize the data.
+
+- The client(the website) will establish a socket.io connection to our node application.
+- Every time the sensor values are changing the node application will send a message to the website.
+
+### TASK 9: Simple Socket.io example
+We want to develop a simple example with socket.io and express
+
+- create a new folder `asen_task_9`
+- switch to the folder on the command line
+- run `npm init`
+- run `npm install express --save`
+- run `npm install socket.io --save`
+- create a index.js file
+- create the directory `public`
+- create a `app.html` file in the public dir
+- initialize express and return the app.html file  on the base route
+- test if your node app is returning your app.html website on the url
+- to use express together with socket.io we have to initialize the express module in a different way since we have to pass the http server module to socket.io:
+
+<script src="https://gist.github.com/chrisgradl/b8101e92feb7f998816b2d28fd6f8dd3.js"></script>
+
+we register a listener on the `connection` event of the socket object. In the callback we get the associated socket. With this socket object we can communicate with the connected client.
+
+We test our our socket.io server with a simple javascript client on our app.html site.
+
+- open the app.html file
+- load the socket.io library before `</body>`
+- since we have the node module on our node server we can load the associated client library directly
+{% highlight javascript %}
+<script src="http://localhost:3000/socket.io/socket.io.js"></script>
+{% endhighlight %}
+- we then can create a socket.io client and connect to the server
+{% highlight javascript %}
+<script>
+  var socket = io.connect('http://localhost:3000');
+  socket.on('hello', function(data) {
+    console.log(data);
+    // when we receive a hello message from the server we send back a info message
+    socket.emit('info', "BLABALAB");
+  });
+</script>
+{% endhighlight %}
+- Open the website in your browser
+- control the output on the command line and in your browser.
+
+## TASK 10 / Assignment
+
+extend Task 9:
+
+- send a random number to the website every 10 ms. Use the setInterval Method for it
+- make sure to stop the timer when the client disconnects
+
+Feedback:
+
+- Did you learn something new today?
+- Do you want more theoretical input?
+- Less Coding more input?
+- Slides instead or Blog?
+- For the Pros: what do you want to learn?
+
+## Pro Task:
+Every year some students hand in the assignments in the wrong file information. Help them out by writing a custom node.js script which
+
+- takes the matrikelnumber and the path to the project folder as arguments
+- creates a zip file which contains all files of the folder except the node_modules folder  

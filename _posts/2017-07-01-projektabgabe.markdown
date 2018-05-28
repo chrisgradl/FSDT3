@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Information regarding exercise and exam"
-date:   2017-07-01 02:00:00
+date:   2018-07-01 02:00:00
 categories: main
 ---
 
