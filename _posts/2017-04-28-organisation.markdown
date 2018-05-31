@@ -23,8 +23,8 @@ The grade consists of:
 |                             |         |
 |:---------------------------:| -------:|
 | Assignment                    |   10%   |
-| Project                     |   20%   |
-| Oral Exam via Skype         |   20%   |
+| Project + Presentation                     |   20%   |
+| Oral Exam         |   20%   |
 
 
 ## Course Schedule
