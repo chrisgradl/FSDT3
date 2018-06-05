@@ -246,7 +246,7 @@ function sendRandomData(socket) {
 
 Diese Funktion muss man dann in dem 'connection' Callback aufrufen wenn sich der Client verbindet -->
 
-### Home Exercise:
+### Writing datapoints into a file:
 
 Write a simple node application to store the datapoints from the arduino into a csv file.
 Use the [FileSystem] to write the datapoints into a csv file with semicolons `;`  as delimiter. The csv-file should have following structure:
@@ -258,11 +258,10 @@ Use the [FileSystem] to write the datapoints into a csv file with semicolons `;`
 | 2443365 |   333   |
 
 The application should start to write into the file when it receives data. It should stop when 5000 data points are in the file.
-Hand in a zipped version of your project with the form `matrikelnummer_hue1_asen2.zip`.
 
-* create a new npm project for the exercise
+
+* create a new npm project
 * you can copy the required parts from this lesson
-* make sure to delete the node_modules folder before you hand in your exercise
 * the comments below should help you:
 
 <script src="https://gist.github.com/chrisgradl/69a892b5c87b40a6de0b9bdeee419b2c.js"></script>

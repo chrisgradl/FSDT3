@@ -7,7 +7,238 @@ categories: 'main'
 
 # Online Session 2:
 
-TBD...
+# Visualization of CSV Files
+In the last session we visualized the datasets with smoothie.js. In your homework you should have created a csv file with datapoints of your arduino. Today we will load this datasets and visualize them in the browser:
+
+![Visualization]({{ site.url }}/fsdt3/img/screenshot.png)
+
+
+## d3.js:
+[d3js] is a very powerful and popular visualization library for the browser. Unfortunately it is also very complicated in the beginning. in this lesson we will use [plottablejs] a simple Visualization library which is based on d3 but makes it more easy to draw simple charts.
+
+## Drawing Charts with plottable.js
+
+### Componentes:
+
+Every plottablejs visualization consists of so called components.
+Components are the modular building blocks of charts in Plottable. A Component is an object that requires visual space and can be placed on a table. Components can be overlaid on top of each other and form a Group, which is in itself a component. The components are drawn in a table structure (column & rows)
+
+componentes are e.g.
+
+- Axes
+- Legends
+- Plots
+- Labels
+
+A simple linegraph would have following components:
+
+- a line plot
+- 2 axes
+
+### Scales:
+Scales can be thought of as functions (in the mathematical sense) that map values from a domain to a range. They essentially function as bridges between Components. For example, if both a Plot and an Axis are driven by the same Scale, then changes to the Plot, such as zooming in and out to change the domain of the data, will be reflected in the Axis.
+
+### Table Layout:
+At the core of any Plottable-based chart is a table-based layout engine. Think of Plottable as a table within an svg element, where each cell in the Table can draw a Component. Take the following example:
+
+{% highlight javascript %}
+[
+ [yAxis, linePlot],
+ [null,  xAxis   ]
+]
+{% endhighlight %}
+
+## Drawing a simple chart with plottablejs
+
+### create a simple file server with node.js
+
+- we create a new npm project with the name `simplechart` in a dedicated folder
+- create a subfolder `public`
+- in the `public` folder create a `index.html` file and a `client.js` file
+- in the base folder `simplechart` create a `index.js` file
+- we will use the express module to route and serve the neccessary files
+- install express with `npm install express --save`
+- in our `index.js` script we start a simple web server and make our files in the folder `public` available
+
+<script src="https://gist.github.com/chrisgradl/acc2a5c9f8f327060407ed0ae6c54518.js"></script>
+
+### load the required resources
+
+- in our index.html file we put the required tags to create a valid html file. You can copy it from [here](https://www.w3schools.com/html/html_intro.asp)
+- we have to load the plottable.js and d3.js library in our header
+{% highlight html %}
+<script src="//d3js.org/d3.v3.min.js" charset="utf-8"></script>
+<script src="https://cdnjs.cloudflare.com/ajax/libs/plottable.js/2.2.0/plottable.min.js" charset="utf-8"></script>
+{% endhighlight %}
+- we also have to load a specific css file for plottable.js
+{% highlight html %}
+<link rel="stylesheet" type="text/css" href="https://cdnjs.cloudflare.com/ajax/libs/plottable.js/2.2.0/plottable.css">
+{% endhighlight %}
+- in the end of the body we load the client.js file:
+{% highlight javascript %}
+<script src="client.js" charset="utf-8"></script>
+{% endhighlight %}
+
+### drawing sample data
+
+we want to draw following simple data set on a line chart. We have 4 data points. Each with a x and y value:
+
+{% highlight javascript %}
+var data = [
+  { "x": 0, "y": 1 },
+  { "x": 1, "y": 2 },
+  { "x": 2, "y": 4 },
+  { "x": 3, "y": 8 }
+];
+{% endhighlight %}
+
+a Scale takes data values (which determine the domain) and maps them to pixel values (the range). This is important because certain objects, such as axes and plots, need to be drawn to the same scale in order for the chart to have meaning.
+
+{% highlight javascript %}
+var xScale = new Plottable.Scales.Linear();
+var yScale = new Plottable.Scales.Linear();
+{% endhighlight %}
+
+To specify a Scale in this example, we create two linear scales, named xScale and yScale respectively. The Scales.Linear class defines a scale that forms a linear mapping between an input domain and an output range.
+
+Once we've specified the scale, we need to set the locations of our Axes. We create two axes, named xAxis and yAxis. The Axes.Numeric class defines an axis that displays numeric data. Its constructor requires a Scale and a string that denotes the orientation for the axis. Valid orientations include "top", "bottom", "left", and "right".
+
+{% highlight javascript %}
+var xAxis = new Plottable.Axes.Numeric(xScale, "bottom");
+var yAxis = new Plottable.Axes.Numeric(yScale, "left");
+var plot = new Plottable.Plots.Line();
+{% endhighlight %}
+
+Now we need to create the plot. In this case, we want a line chart, so we use the Plots.Line class.
+
+{% highlight javascript %}
+var plot = new Plottable.Plots.Line();
+{% endhighlight %}
+
+
+Plottable charts have a concept of Accessors, which are functions for accessing specific datum properties. An Accessor function typically has three parameters: datum (the particular entry that is being accessed), index (the entry's index in its dataset), and dataset (the dataset that the datum belongs to).
+
+Line plots require two basic accessors to be defined for x and y coordinates, as well as the scales that the Accessors should correspond to.
+
+{% highlight javascript %}
+plot.x(function(d) { return d.x; }, xScale);
+plot.y(function(d) { return d.y; }, yScale);
+{% endhighlight %}
+
+Raw data must be converted to a Dataset object before it can be used with plots.
+
+{% highlight javascript %}
+
+var dataset = new Plottable.Dataset(data);
+
+plot.addDataset(dataset);
+
+{% endhighlight %}
+
+Now we can add our dataset directly to the plot.
+
+{% highlight javascript %}
+
+plot.addDataset(dataset);
+{% endhighlight %}
+
+Now we need to put all the pieces together to create a chart. To do this, we will create a Table. We want to create a basic chart with a y-axis on the left side, an x-axis on the bottom, and a plot within the boundaries established by the axes. With this in mind, we define our Table as follows.
+{% highlight javascript %}
+var chart = new Plottable.Components.Table([
+  [yAxis, plot],
+  [null, xAxis]
+]);
+
+{% endhighlight %}
+
+To draw the plot on the html file we use the `renderTo()` function
+{% highlight javascript %}
+chart.renderTo("svg#tutorial-result");
+{% endhighlight %}
+
+in the html file we have to create the svg element with the correct id:
+{% highlight javascript %}
+    <svg id="tutorial-result" height="400"></svg>
+{% endhighlight %}
+
+### add labels to the example:
+
+- try now to add a x-Label and y-Label to the chart.
+- Where do you have to put it in the table?
+{% highlight javascript %}
+var xLabel = new Plottable.Components.AxisLabel("x axis");
+{% endhighlight %}
+
+
+### Load data from a file
+
+In the previous example we have visualized predefined datapoints stored in a variable. But how can we import data from a file? The `d3.csv()` function allows us to load a file and process the data points.
+
+{% highlight javascript %}
+d3.csv("/path/to/file", function(error, d) {
+
+  if (error) {
+      console.log(error);
+      throw error;
+  }
+  console.log(d);
+  var csvdata = new Plottable.Dataset(d);
+  plot.addDataset(csvdata);
+});
+{% endhighlight %}
+
+- create a file `testdata.csv`in the public folder and copy this content into it:
+{% highlight javascript %}
+x,y
+0,3
+1,2
+2,8
+3,19
+4,-4
+{% endhighlight %}
+- load this file with the `d3.csv()` function
+- visualize the csv data instead of the `data` variable
+
+
+## Visualizing a CTG csv file
+
+Our file contains following data points
+
+- seconds: elapsed seconds starting with 0
+- FHR = fetal Heart Rate
+- UC = Uterus Contraction
+
+### Download the dataset
+
+The datasets can be downloaded on following website
+<http://physionet.org/cgi-bin/atm/ATM>
+
+- Choose following database: CTU-CHB Intrapartum Cardiotocography Database
+- Choose one recording
+- Select `to end`  
+- Time Format: seconds
+- In the toolbox select `Export Signal als CSV`
+![Visualization]({{ site.url }}/fsdt3/img/physionetscreenshot.png)
+- download the created `samples.csv`
+- copy the file into the `public` folder
+- delete the first line in the file
+- remove the quotation marks from the second line
+
+{% highlight javascript %}
+seconds, bpm, nd
+0.000,158.000,2.000
+0.250,158.000,2.000
+0.500,158.000,2.000
+0.750,158.000,2.000
+....  
+{% endhighlight %}
+
+- visualize the bpm or nd values
+- tip: make the appropriate adjustments in the Accessors functions: our datapoints are no longer x and y but seconds, bpm and nd
+
+
+[d3js]: https://d3js.org/
+[plottablejs]: http://plottablejs.org/ 
 
 
 
