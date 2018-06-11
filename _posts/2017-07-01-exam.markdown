@@ -12,10 +12,7 @@ categories: main
 * What is npm and what did we used it for?
 * How can you load additional modules and libraries into your nodejs program?
 * How can you subscribe to an event in nodejs?
-* How does nodejs handle long running operations?
 * Give an example which shows the difference between an asynchronous and synchronous execution of a function in node
 * Which 3rd party modules did we use for our application and how did we install and download them?
 * Explain the overall architecture of our application
 * Which event did we use to receive the data from the arduino and how do we send  data to the website?
-
-Depending on our progress in the next session there will be 3-5 additional questions.
