@@ -22,9 +22,9 @@ The grade consists of:
 
 |                             |         |
 |:---------------------------:| -------:|
-| Assignment                    |   10%   |
-| Project + Presentation                     |   20%   |
-| Written Exam         |   20%   |
+| Assignment                  |   10%   |
+| Project                     |   10%   |
+| Written Exam                |   30%   |
 
 
 ## Course Schedule
