@@ -1,0 +1,310 @@
+<!DOCTYPE html>
+<html lang="en-us">
+  
+  <head>
+  <meta charset="UTF-8">
+  <title>ASEN Part 2</title>
+  <meta name="viewport" content="width=device-width, initial-scale=1">
+  <meta name="theme-color" content="#157878">
+  <link rel="stylesheet" href="/fsdt3/css/normalize.css">
+  <link href='https://fonts.googleapis.com/css?family=Open+Sans:400,700' rel='stylesheet' type='text/css'>
+  <link rel="stylesheet" href="/fsdt3/css/cayman.css">
+</head>
+
+
+  <body>
+    <section class="page-header">
+  <h1 class="project-name">ASEN Part 2</h1>
+  <h2 class="project-tagline">Angewandte Sensorik und Elektronik</h2>
+  <a href="/fsdt3/" class="btn">Home</a>
+  <a href="https://github.com/chrisgradl/fsdt3/archive/master.zip" class="btn">Project Files as zip</a>
+</section>
+
+
+    <section class="main-content">
+      
+      <h1 id="sensor-display-app">Sensor Display App</h1>
+
+<p>In this lesson we will build a simmple application to receive sensor data from the Arduino and display it on a website.</p>
+
+<p><img src="/fsdt3/img/goal.gif" alt="FSDT3 Architecture" /></p>
+
+<p>The main building blocks of our app:
+<img src="/fsdt3/img/fsdt3_architecture.png" alt="FSDT3 Architecture" /></p>
+
+<h3 id="how-to-get-data-from-the-arduino-to-our-node-appliction-and-then-to-our-website">How to get Data from the Arduino to our Node Appliction and then to our website?</h3>
+
+<p>We will use a 3rd party module called serialport to read the sensor data in from the Arduino.</p>
+
+<h3 id="how-to-display-the-data-on-a-website">How to display the data on a website?</h3>
+
+<p>We will use the socket.io module to send the data from the node application to the website</p>
+
+<h2 id="read-in-the-data-from-the-arduino">1. Read in the data from the Arduino</h2>
+
+<h3 id="task-1-get-data-from-the-arduino">TASK 1: Get Data from the Arduino:</h3>
+
+<p>Depending on your current progress you should already print out sensor values in the serial log in the arduino IDE. If not please deploy following code to your arduino.</p>
+
+<script src="https://gist.github.com/chrisgradl/b2b7ebea853982c814a238cf730e1cff.js"></script>
+
+<h3 id="task-2-initialize-the-sensor-display-app">TASK 2: Initialize the Sensor Display App</h3>
+
+<ul>
+  <li>create the directory sensorvis and switch into it on the command line</li>
+  <li>create a new npm project</li>
+  <li>add the following dependencies to the project with the –save flag
+    <ul>
+      <li>express</li>
+      <li>serialport: we have to install a specific version with this command: <code class="highlighter-rouge">npm install serialport@4.0.7 --save </code></li>
+      <li>socketio</li>
+    </ul>
+  </li>
+  <li>check if all dependencies were added in the package.json file</li>
+  <li>create the directory ‘public’ in the sensorvis directory</li>
+  <li>switch into the public dir and create a hmtl file sensordisplay.html</li>
+  <li>Then use express to return this file on your ‘/’ route. Use the code from the last session if you need help.</li>
+</ul>
+
+<h2 id="read-in-the-arduino-data-stream">Read in the arduino data stream</h2>
+<p>The Sensor values will be read from the serial port of the USB interface of the arduino board. We will use the library <a href="https://github.com/voodootikigod/node-serialport/">node-serialport</a> for it.</p>
+
+<figure class="highlight"><pre><code class="language-json" data-lang="json"><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387709,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor raw"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">500</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387710,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor bpm"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"bpm"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387720,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor raw"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">494</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387721,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor bpm"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"bpm"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">35</span><span class="p">}</span><span class="w">
+</span><span class="p">{</span><span class="err">timestamp:</span><span class="w"> </span><span class="err">387730,</span><span class="w"> </span><span class="err">type:</span><span class="w"> </span><span class="nt">"heart rate sensor raw"</span><span class="err">,</span><span class="w"> </span><span class="err">unit</span><span class="p">:</span><span class="w"> </span><span class="s2">"raw"</span><span class="p">,</span><span class="w"> </span><span class="err">value</span><span class="p">:</span><span class="w"> </span><span class="mi">486</span><span class="p">}</span></code></pre></figure>
+
+<h3 id="task-3-list-all-available-devices-with-the-serial-port-library">TASK 3: List all available devices with the serial port library</h3>
+
+<p>We have to find the right port (e.g. USB port) from which we can read in the data from the arduino.</p>
+
+<ul>
+  <li>Load the seriaport module</li>
+  <li>list the available devices to read from with the list function</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">serialport</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'serialport'</span><span class="p">);</span>
+<span class="nx">serialport</span><span class="p">.</span><span class="nx">list</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">err</span><span class="p">,</span> <span class="nx">ports</span><span class="p">)</span> <span class="p">{</span>
+
+  <span class="nx">ports</span><span class="p">.</span><span class="nx">forEach</span><span class="p">(</span><span class="kd">function</span><span class="p">(</span><span class="nx">port</span><span class="p">)</span> <span class="p">{</span>
+      <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">port</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>To read in the data from the arduino we need the portname of it. Find the arduino in the listed devices on your terminal and save the portname into a var.</p>
+
+<p>Mac &amp; Linux:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">portName</span> <span class="o">=</span> <span class="s1">'/dev/cu.usbmodem1421'</span><span class="p">;</span></code></pre></figure>
+
+<p>Windows:</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">portName</span> <span class="o">=</span> <span class="s1">'COM3'</span><span class="p">;</span></code></pre></figure>
+
+<h3 id="task-4-connect-to-the-serial-port-of-the-arduino">TASK 4: Connect to the Serial Port of the arduino:</h3>
+
+<p>we create a new serialport connection by passing the <code class="highlighter-rouge">portName</code> to the serialport library. Additional we also pass 2 option parameters:</p>
+
+<ul>
+  <li>baudrate: defines the modulation rate (transfer rate)</li>
+  <li>parser: defines how we will read in the data from the arduino. In our case we define the two delimiters (\r\n):</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">arduinoPort</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">serialport</span><span class="p">(</span><span class="nx">portName</span><span class="p">,</span> <span class="p">{</span>
+    <span class="na">baudrate</span><span class="p">:</span> <span class="mi">9600</span><span class="p">,</span>
+    <span class="na">parser</span><span class="p">:</span> <span class="nx">serialport</span><span class="p">.</span><span class="nx">parsers</span><span class="p">.</span><span class="nx">readline</span><span class="p">(</span><span class="s2">"\r\n"</span><span class="p">)</span>
+<span class="p">});</span></code></pre></figure>
+
+<p>Print out the <code class="highlighter-rouge">arduinoPort</code> variable in your terminal:</p>
+
+<h3 id="task-5-subscribe-to-the-events-of-the-arduino-serial-port">TASK 5: Subscribe to the events of the arduino serial port</h3>
+
+<p>The serial port module has several events we want to subscribe to. Register a callback function to following events. Look into the documentation of the library <a href="https://github.com/EmergingTechnologyAdvisors/node-serialport#module_serialport--SerialPort+event_error">here</a></p>
+
+<ul>
+  <li>Event: “error”</li>
+  <li>Event: “open”</li>
+  <li>Event: “data”</li>
+  <li>Event: “disconnect”</li>
+  <li>Event: “close”</li>
+</ul>
+
+<p>Print out a according message in every callback. Run the script and look into the output of your terminal</p>
+
+<h3 id="task-6-read-in-the-sensor-data">TASK 6: Read in the Sensor data</h3>
+
+<p>In the callback <code class="highlighter-rouge">on('data', function(data){})</code> we receive the sensor values from the arduino. The data is read in as String. To access the single parameters we will parse the String into a Json object. Use the function <code class="highlighter-rouge">Json.parse()</code> and print out the sensor values on the terminal.</p>
+
+<h3 id="task-7-optional-fix-the-parse-errors">TASK 7 Optional: Fix the parse errors</h3>
+<p>To prevent an error on windows we have to wrap the <code class="highlighter-rouge">Json.parse()</code> function into a try catch block to catch the error</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="k">try</span><span class="p">{</span>
+    <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+<span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+  <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+<h2 id="send-the-sensor-data-to-a-website">2. Send the sensor data to a website</h2>
+
+<h3 id="task-8-initialize-socketio">TASK 8: Initialize socket.io</h3>
+
+<p>We want to send the datapoints to a website. We will use socket.io for the communication. We have to adjust the initialization of express when it is used together with socket.io</p>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">express</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'express'</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">app</span> <span class="o">=</span> <span class="nx">express</span><span class="p">();</span>
+<span class="kd">var</span> <span class="nx">http</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'http'</span><span class="p">).</span><span class="nx">Server</span><span class="p">(</span><span class="nx">app</span><span class="p">);</span>
+<span class="kd">var</span> <span class="nx">socketio</span> <span class="o">=</span> <span class="nx">require</span><span class="p">(</span><span class="s1">'socket.io'</span><span class="p">)(</span><span class="nx">http</span><span class="p">);</span>
+<span class="nx">http</span><span class="p">.</span><span class="nx">listen</span><span class="p">(</span><span class="mi">3000</span><span class="p">);</span></code></pre></figure>
+
+<h3 id="task-9-emit-sensor-values-to-socketio-clients">TASK 9: Emit sensor values to socket.io clients</h3>
+
+<p>To send the sensor values to the client we have to use the function <code class="highlighter-rouge">emit(route, data)</code>. we start to read in the data from the serialport when a client connects via socket.io.</p>
+
+<ul>
+  <li>register a listener on the <code class="highlighter-rouge">connection</code> event on the socket.io object.</li>
+  <li>register a listener on the serialport to receive the data from the arduino.</li>
+  <li>In this callback call the function <code class="highlighter-rouge">emit('route', data)</code> on the socketio object.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">socketio</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'connection'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="s2">"WebSocket connected"</span><span class="p">);</span>
+    <span class="c1">//start to read the data from the arduino and send to connected client</span>
+    <span class="nx">arduinoPort</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+      <span class="k">try</span><span class="p">{</span>
+        <span class="kd">var</span> <span class="nx">obj</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+          <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="nx">obj</span><span class="p">);</span>
+      <span class="p">}</span><span class="k">catch</span><span class="p">(</span><span class="nx">e</span><span class="p">){</span>
+        <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">e</span><span class="p">);</span>
+      <span class="p">}</span>
+
+    <span class="p">});</span>
+<span class="p">});</span></code></pre></figure>
+
+<h3 id="task-10-receive-the-data-in-the-browser">TASK 10: Receive the data in the browser</h3>
+
+<ul>
+  <li>Switch to the sensordisplay.html file.</li>
+  <li>At the the end of the body import the socket.io javascript client library</li>
+  <li>Add the javascript code to connect to the socket.io server to receive the data points</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="o">&lt;</span><span class="nx">script</span><span class="o">&gt;</span>
+  <span class="kd">var</span> <span class="nx">socket</span> <span class="o">=</span> <span class="nx">io</span><span class="p">.</span><span class="nx">connect</span><span class="p">(</span><span class="s1">'http://localhost:3000'</span><span class="p">);</span>
+  <span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">data</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">data</span><span class="p">);</span>
+  <span class="p">});</span>
+<span class="o">&lt;</span><span class="sr">/script&gt;</span></code></pre></figure>
+
+<h2 id="display-the-data-on-a-website">3. Display the data on a website</h2>
+
+<p>To display the sensor values we will use a simple javascript library called <a href="http://smoothiecharts.org/">Smoothie.js</a>.</p>
+
+<h3 id="task-11-import-the-smoothiejs-library">TASK 11: Import the smoothie.js library:</h3>
+
+<ul>
+  <li>create a folder <code class="highlighter-rouge">lib</code> inside the public folder</li>
+  <li>create a new file <code class="highlighter-rouge">smoothie.js</code> in this folder</li>
+  <li>copy the code from <a href="https://raw.githubusercontent.com/joewalnes/smoothie/master/smoothie.js">here</a> into this file</li>
+  <li>in the sensordisplay.html file import this javascript file</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">    <span class="nt">&lt;script </span><span class="na">src=</span><span class="s">"/lib/smoothie.js"</span> <span class="na">charset=</span><span class="s">"utf-8"</span><span class="nt">&gt;&lt;/script&gt;</span></code></pre></figure>
+
+<h3 id="task-12-data-visualization">TASK 12: Data Visualization</h3>
+
+<p>To display the data we have to create a new smoothie.js objec and asign the datapoints to it when we receive them.</p>
+
+<ul>
+  <li>create a canvas element for our chart in the html file</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-html" data-lang="html">    <span class="nt">&lt;canvas</span> <span class="na">id=</span><span class="s">"mycanvas"</span> <span class="na">width=</span><span class="s">"800"</span> <span class="na">height=</span><span class="s">"200"</span><span class="nt">&gt;&lt;/canvas&gt;</span></code></pre></figure>
+
+<ul>
+  <li>create a new smoothie.js object</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">smoothie</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">SmoothieChart</span><span class="p">();</span>
+<span class="nx">smoothie</span><span class="p">.</span><span class="nx">streamTo</span><span class="p">(</span><span class="nb">document</span><span class="p">.</span><span class="nx">getElementById</span><span class="p">(</span><span class="s2">"mycanvas"</span><span class="p">));</span>
+
+<span class="kd">var</span> <span class="nx">line1</span> <span class="o">=</span> <span class="k">new</span> <span class="nx">TimeSeries</span><span class="p">();</span>
+<span class="nx">smoothie</span><span class="p">.</span><span class="nx">addTimeSeries</span><span class="p">(</span><span class="nx">line1</span><span class="p">);</span>   </code></pre></figure>
+
+<ul>
+  <li>to draw new elements we have to pass the sensor values to the line1 object.</li>
+</ul>
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="nx">socket</span><span class="p">.</span><span class="nx">on</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="kd">function</span><span class="p">(</span><span class="nx">msg</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">console</span><span class="p">.</span><span class="nx">log</span><span class="p">(</span><span class="nx">msg</span><span class="p">);</span>
+    <span class="c1">//we only want to visualize the raw sensor value</span>
+    <span class="nx">line1</span><span class="p">.</span><span class="nx">append</span><span class="p">(</span><span class="k">new</span> <span class="nb">Date</span><span class="p">().</span><span class="nx">getTime</span><span class="p">(),</span> <span class="nx">msg</span><span class="p">);</span>
+
+<span class="p">});</span></code></pre></figure>
+
+<!-- ### Danger Alert! Mein Arduino geht nicht Was jetzt???
+Falls der Arduino aus irgendeinem Grund nicht verfügbar ist oder nicht funktioniert gibt es die Möglichkeit Random Daten von der Node Applikation zum Client zu schicken
+Dazu erstelle folgende Funktion:
+
+
+<figure class="highlight"><pre><code class="language-javascript" data-lang="javascript"><span class="kd">var</span> <span class="nx">sensorJson</span> <span class="o">=</span> <span class="nx">JSON</span><span class="p">.</span><span class="nx">parse</span><span class="p">(</span><span class="s1">'{"timestamp": 19123,"type": "heart rate sensor raw","unit": "raw","value": 987}'</span><span class="p">);</span>
+<span class="kd">function</span> <span class="nx">sendRandomData</span><span class="p">(</span><span class="nx">socket</span><span class="p">)</span> <span class="p">{</span>
+    <span class="nx">setInterval</span><span class="p">(</span><span class="kd">function</span><span class="p">()</span> <span class="p">{</span>
+        <span class="nx">sensorJson</span><span class="p">.</span><span class="nx">value</span> <span class="o">=</span> <span class="nb">Math</span><span class="p">.</span><span class="nx">random</span><span class="p">();</span>
+        <span class="nx">socket</span><span class="p">.</span><span class="nx">emit</span><span class="p">(</span><span class="s1">'data'</span><span class="p">,</span> <span class="nx">sensorJson</span><span class="p">);</span>
+    <span class="p">},</span> <span class="mi">100</span><span class="p">);</span>
+<span class="p">}</span></code></pre></figure>
+
+
+Diese Funktion muss man dann in dem 'connection' Callback aufrufen wenn sich der Client verbindet -->
+
+<h3 id="writing-datapoints-into-a-file">Writing datapoints into a file:</h3>
+
+<p>Write a simple node application to store the datapoints from the arduino into a csv file.
+Use the <a href="https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback">FileSystem</a> to write the datapoints into a csv file with semicolons <code class="highlighter-rouge">;</code>  as delimiter. The csv-file should have following structure:</p>
+
+<table>
+  <thead>
+    <tr>
+      <th style="text-align: center">timestamp</th>
+      <th style="text-align: right">value</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr>
+      <td style="text-align: center">2443164</td>
+      <td style="text-align: right">15</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2443265</td>
+      <td style="text-align: right">212</td>
+    </tr>
+    <tr>
+      <td style="text-align: center">2443365</td>
+      <td style="text-align: right">333</td>
+    </tr>
+  </tbody>
+</table>
+
+<p>The application should start to write into the file when it receives data. It should stop when 5000 data points are in the file.</p>
+
+<ul>
+  <li>create a new npm project</li>
+  <li>you can copy the required parts from this lesson</li>
+  <li>the comments below should help you:</li>
+</ul>
+
+<script src="https://gist.github.com/chrisgradl/69a892b5c87b40a6de0b9bdeee419b2c.js"></script>
+
+
+
+      <footer class="site-footer">
+  <span class="site-footer-owner"><a href="">ASEN Part 2</a> is maintained by <a href="https://www.fhstp.ac.at/de/uber-uns/mitarbeiter-innen-a-z/gradl-christian">Christian Gradl</a>.</span>
+  <span class="site-footer-credits">This page was generated by <a href="https://pages.github.com">GitHub Pages</a> using the <a href="https://github.com/pietromenna/jekyll-cayman-theme">Cayman theme</a> by <a href="http://github.com/jasonlong">Jason Long</a>.</span>
+</footer>
+
+
+    </section>
+
+  </body>
+</html>
