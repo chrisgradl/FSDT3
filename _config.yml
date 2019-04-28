@@ -3,7 +3,7 @@ title:        ASEN Part 2
 tagline:      Angewandte Sensorik und Elektronik
 baseurl:      "/fsdt3"
 paginate:     1
-future:       true   
+future:       false   
 
 # About/contact
 author:
