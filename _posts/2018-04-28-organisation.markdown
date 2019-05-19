@@ -22,8 +22,7 @@ The grade consists of:
 
 |                             |         |
 |:---------------------------:| -------:|
-| Assignment                  |   10%   |
-| Project                     |   10%   |
+| Project                     |   20%   |
 | Written Exam                |   30%   |
 
 
