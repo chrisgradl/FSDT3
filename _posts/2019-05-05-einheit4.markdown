@@ -1,0 +1,181 @@
+---
+layout: default
+title:  "Lesson 4: Real-time Visualization with React application"
+date:   2019-05-18 08:00:00
+categories: main
+---
+
+# Visualizing the sensor data
+You have learned to receive, save and send the data from the arduino. But what if you want to visualize the sensor data to get insights or you want to check how the received values change over time? In this lesson we want to build a website which connects to the arduino server application and displays the sensor values on an html file. 
+
+# Learning React
+We will use the Framework React to build this application. Check out this tutorial to get some basic understanding about the framework
+
+# Go through this tutorial to get a basic understanding of React: 
+[Check out this Tutorial for understanding the basics of React!!!](https://www.taniarascia.com/getting-started-with-react/)
+
+You do not have to understand everything in detail, but you should be able to:
+
+* add new components to your project
+* import components in other componentsand display them in the render method
+* pass values to componentns with props
+* change the state of a component
+* display values of state and props as content in the render method     
+
+The important concepts to understand are:
+
+* what is a Component?
+* We can display html content of a component with the render method
+* What is jsx?
+* we can use functions or class based components
+* every component can have props and state 
+* you can difference between simple (only display props) and stateful components(handle state)
+* components have lifecycle methods which are called on specific events (We need the componendDidMount method)
+
+# Initialize a new React App
+Create a new React app by running following npm command:
+`npm init react-app sensor-app`
+Switch into the sensor-app directory and run `npm start` to start the React App.
+
+In this project we only use a single custom component. In a complex project you would seperate parts of application in several components.   
+
+## Add libraries to the project
+We need following modules for our visualization app:
+
+* `npm install react-vis`
+*  `npm install socket.io-client`
+
+## convert App.js to a class based component
+
+The default App.js componentn is a function. We want to change it to a class based component:
+A class based component has following structure
+{% highlight javascript %}
+class MyFirstComponent extends Component {
+	render() {
+		return (
+			<div>
+				<h>Hello World</h>
+			</div>
+		);
+	}
+}
+{% endhighlight %}
+If you want to use the component in other files you have to export the class with `export default MyFirstComponent;`
+When you want to use the component in another file you need to import it on the top of the file: `import MyFirstComponent  from './MyFirstComponent';` 
+
+## receive and display the sensor values in the App.js component
+
+We need to import the socket.io module:
+`import socketIOClient from 'socket.io-client';';`
+
+We have to create a connection to the server in the componentDidMount Method. This method is called once when the component is visible the first time on the website
+{% highlight javascript %}
+componentDidMount() {
+	const socket = socketIOClient('http://localhost:4000');
+
+	socket.on('connect', () => {
+		console.log("We connected to the server");
+		
+	});
+
+	socket.on('data', (data) => {
+		console.log("We received data from the server", data);
+	});
+}
+{% endhighlight %}
+
+## Keep the current connection of the application in the state of the component:
+
+Is the socket.io server connected? When yes which current value does the sensor has? We store this changing information in the state of the App.js component. Therefore we set a default state with initial values in the constructor: 
+{% highlight javascript %}
+constructor(props) {
+		super(props);
+		this.state = {
+			isConnected: false,
+			currentValue: null,
+			values: []
+		};
+	}
+{% endhighlight %} 
+
+We then want to change the state if the connection to the server is established and data is received. We also want to save the last 100 values in the values array so we can visualize the change of the sensor over time: 
+{% highlight javascript %}
+socket.on('connect', () => {
+			this.setState({ isConnected: true });
+		});
+
+		socket.on('data', (data) => {
+			this.setState((prevState) => {
+				const values = prevState.values;
+				if (values.length > 100) {
+					values.shift();
+				}
+                // we need to save the sensor values as x and y values 
+				values.push({ x: data.timestamp, y: data.value });
+				return {
+					currentValue: data,
+					values: values
+				};
+			});
+		});
+{% endhighlight %} 
+
+## Display the state in the render method:
+We can access the state of the component with `this.state.someValue`. We display the values in the render method: 
+{% highlight javascript %}
+render() {
+		return (
+			<div className="App">
+				<header className="App-header">
+					<p>App is is connected: {this.state.isConnected + ''}</p>
+					<p>Value is: {this.state.currentValue && this.state.currentValue.value}</p>
+				</header>
+			</div>
+		);
+	}
+{% endhighlight %} 
+
+### Use react-viz to visualize the data:
+
+We want to use react-vis to display the values of the `this.state.values` array. react-vis is a library which contains a lot of visualization components. You can use the components in your render method as you would use a self written component. First you have to import the components you want to use from the library. You also have to import a css file from react-vis:
+{% highlight javascript %}
+import '../node_modules/react-vis/dist/style.css';
+import { XYPlot, XAxis, YAxis, HorizontalGridLines, LineSeries } from 'react-vis';
+{% endhighlight %}
+
+Then you can use the components in the render Method to display a line graph:
+
+{% highlight javascript %}
+<XYPlot width={1000} height={300}>
+	<HorizontalGridLines />
+    <LineSeries data={this.state.values} />
+	<XAxis />
+	<YAxis />
+</XYPlot>
+{% endhighlight %}
+
+You pass the values array from your state to the data prop of the LineSeries Component: `<LineSeries data={this.state.values} />`.   
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+
+

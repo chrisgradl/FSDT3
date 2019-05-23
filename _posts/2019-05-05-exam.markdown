@@ -1,7 +1,7 @@
 ---
 layout: default
 title:  "Questions for the Exam"
-date:   2019-06-09 01:00:00
+date:   2019-05-20 01:00:00
 categories: main
 ---
 
@@ -15,4 +15,10 @@ categories: main
 * Give an example which shows the difference between an asynchronous and synchronous execution of a function in node
 * Which 3rd party modules did we use for our application and how did we install and download them?
 * Explain the overall architecture of our application
-* Which event did we use to receive the data from the arduino and how do we send  data to the website?
+* Which event did we use to receive the data from the arduino and how do we send data to the website?
+* What is the difference between props and state in a react component?
+* In which livecycle method did we  start the connection to the socket.io server?
+* how can we display javascript variables in the render method? ({value}) 
+* Which method is used to set the state of a  component in react? 
+* Why do we have to use the try catch Block to parse the Serial Input from the Arduino?
+* How did we convert the received data from the arduino into a Javascript Object

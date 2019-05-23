@@ -1,11 +1,11 @@
 ---
 layout: default
-title: Online Session 1
+title: Online Session 1 and 2
 date: 2019-04-28 09:00:00
 categories: 'main'
 ---
 
-# Online Session 1: Server Side Javascript with Node.js
+# Online Session 1 und 2: Server Side Javascript with Node.js
 
 ## Repetition node.js
 

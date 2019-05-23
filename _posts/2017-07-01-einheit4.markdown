@@ -1,8 +1,0 @@
----
-layout: default
-title:  "Lesson 4: Visualization of CSV Files"
-date:   2019-06-09 00:00:00
-categories: main
----
-
-TBD

@@ -1,0 +1,164 @@
+---
+layout: default
+title:  "Lesson 3: Arduino -> Node"
+date:   2019-05-17 08:00:00
+categories: main
+---
+
+# Sensor Display App
+
+In this lesson we will build a simple application to receive sensor data from the Arduino and  send the data to a socket.io client. This part only covers how to send data to a socket.io client. To save the data into a csv file see the project on ecampus!
+
+![FSDT3 Architecture]({{ site.url }}/fsdt3/img/goal.gif)
+
+The main building blocks of our app:
+![FSDT3 Architecture]({{ site.url }}/fsdt3/img/fsdt3_architecture.png)
+
+### How to get Data from the Arduino to our Node Appliction and then to our website?
+
+We will use a 3rd party module called serialport to read the sensor data in from the Arduino.
+
+### How to send the data to another website or node application?
+
+We will use the socket.io module to send the data from the node application to a client.
+
+## 1. Read in the data from the Arduino
+
+### Get Data from the Arduino:
+
+Depending on your current progress you should already print out sensor values in the serial log in the arduino IDE. If not please deploy following code to your arduino:
+
+<script src="https://gist.github.com/chrisgradl/b2b7ebea853982c814a238cf730e1cff.js"></script>
+
+### Initialize the Sensor Display App
+
+* create the directory server and switch into it on the command line
+* create a new npm project
+* add the following dependencies to the project 
+  * serialport:`npm install serialport `
+  * socketio:`npm install socketio`
+* check if all dependencies were added in the package.json file
+
+### Read in the arduino data stream
+The Sensor values will be read from the serial port of the USB interface of the arduino board. We will use the library [node-serialport] for it. 
+
+This is the data we will reveive from the arduino:
+{% highlight json %}
+{timestamp: 387709, type: "heart rate sensor raw", unit: "raw", value: 500}
+{timestamp: 387710, type: "heart rate sensor bpm", unit: "bpm", value: 35}
+{timestamp: 387720, type: "heart rate sensor raw", unit: "raw", value: 494}
+{timestamp: 387721, type: "heart rate sensor bpm", unit: "bpm", value: 35}
+{timestamp: 387730, type: "heart rate sensor raw", unit: "raw", value: 486}
+{% endhighlight %}
+
+### List all available devices with the serialport library and find the arduin
+We have to find the right port (e.g. USB port) from which we can read in the data from the arduino.
+* Load the seriaport module
+* list the available devices 
+{% highlight javascript %}
+const serialport = require('serialport');
+serialport.list((err, result) => {
+	console.log(result);
+});
+{% endhighlight %}
+To read in the data from the arduino we need the portname of it. Find the arduino in the listed devices on your terminal and save the manufacturer value into a const.
+{% highlight javascript %}
+const manufacturerName = 'Arduino (www.arduino.cc)';
+{% endhighlight %}
+### Find the arduino from the list of devices
+To connect to the Arduino we search for the device which matches the manufacturer Name:
+{% highlight javascript %}
+serialport.list((err, result) => {
+    //the find operation returns the value of the array when the passed method return true 
+	const device = result.find((device) => device.manufacturer === manufacturerName);
+	if (device) {
+		console.log('Found Arduino', device);
+		
+	} else {
+		console.log('No arduino in the listed devices');
+	}
+});
+{% endhighlight %} 
+### Connect to the Serial Port of the arduino:
+we create a new serialport connection by passing the `comName` to the serialport library. Additional we also pass 1 option parameters:
+* baudrate: defines the modulation rate (transfer rate)
+{% highlight javascript %}
+const arduinoPort = new serialport(device.comName, { baudRate: 115200 });
+{% endhighlight %}
+### Read in the data from the arduino with a parser:
+We want to read the data from the arduino as string and line by line. We can add a custom parser object to the arduinoPort object which converts the raw data in a readable format:
+{% highlight javascript %}
+const Readline = require('@serialport/parser-readline');
+const parser = arduinoPort.pipe(new Readline({ delimiter: '\n' }));
+{% endhighlight %}
+Then we can add a event listener to the parser object which is called every time the arduino emits a new line:
+{% highlight javascript %}
+parser.on('data', (data) => { 
+    console.log(data);
+}
+{% endhighlight %}
+### Convert the received data string into a javascript object:
+The received value is a string. The string contains a JSON object. We need to parse the string and save the result in a variable. We use the JSON.parse() function for it:
+{% highlight javascript %}
+parser.on('data', (data) => { 
+    const parsedValue = JSON.parse(data);
+}
+{% endhighlight %}
+We need to use a try catch block because it is possible that we do not get a coorect JSON String from the arduino. This happens when the line parser starts to read in the middle of a received data value from the arduino:
+{% highlight javascript %}
+try {
+	const parsedValue = JSON.parse(data);
+} catch (error) {
+	console.log('Could not read Line skip it...', error);
+}
+{% endhighlight %}
+## 2. Send the sensor data to a socket.io client
+
+### Initialize socket.io
+We want to send the datapoints to a socket.io client. This can be another node server, a website or event a mobile app. We need to import the modules and initialize the socket.io server: 
+{% highlight javascript %}
+const http = require('http');
+const server = http.createServer();
+const io = require('socket.io')(server);
+let connectedSocket = null;
+io.on('connection', (socket) => {
+	connectedSocket = socket;
+	console.log('a user connected');
+});
+server.listen(4000, () => {
+	console.log('listening on *:4000');
+});
+{% endhighlight %}  
+We declare a let variabe connectedSocket. Everytime a new client connects to our server we asign the socket connection to the connectedSocket variable.
+
+### Emit sensor values to socket.io clients
+To send the sensor values to the client we have to use the function `emit(route, data)`. In the `on('data')` event listener we check if a client is connected. If true we send the arduino values to the client:
+{% highlight javascript %}
+if (connectedSocket) {
+	connectedSocket.emit('data', parsedValue);
+}
+{% endhighlight %}
+### Receive the data in a socket.io client
+* create a new file sensorclient.js in the server folder
+* this is a second node application with a a socket.io client which connects to the socket.io server of our index.js node application.
+* to test the socket.io connection you have to run both node application on the command line 
+{% highlight javascript %}
+const io = require('socket.io-client');
+const socket = io.connect('http://localhost:3000', { reconnect: true });
+// Add a connect listener
+socket.on('connect', function(socket) {
+	console.log('Connected!');
+});
+
+socket.on('data', (response) => {
+	console.log(response);
+});
+{% endhighlight %}
+If you run the the two application you should see the received output in the terminal where you started sensorclient.js
+
+[node-serialport]: https://serialport.io/
+[Socket.io]: http://socket.io
+[Seite]: http://localhost:4000/
+[Websocket Anwendung]: http://www.websocket.org/echo.html
+[Erklärung zu Module]: http://openmymind.net/2012/2/3/Node-Require-and-Exports/
+[FileSystem]: https://nodejs.org/api/fs.html#fs_fs_appendfile_file_data_options_callback
